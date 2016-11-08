@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_role]
-  before_action :require_user
+  #before_action :require_user, except: [:new, :show]
   before_action :require_same_user, only: [:show, :edit, :update]
   before_action :require_admin, only:[:index, :destroy]
   
@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.full_name = @user.first_name + " " + @user.last_name
     if @user.save
+      session[:user_id] = @user.id
       flash[:success] = 'You have successfully signed up.'
       redirect_to @user
     else
@@ -77,15 +78,20 @@ class UsersController < ApplicationController
       params.require(:user).permit(:first_name, :last_name, :full_name, :is_admin, :email, :password)
     end
     
-    def require_same_user
-      if current_user != @user
+    def require_same_user 
+      if current_user != @user and !current_user.is_admin?
         flash[:danger] = "You have no permission to visit this page."
         redirect_to root_path
       end
     end
     
     def require_admin
-      if !current_user.is_admin
+      if logged_in? 
+        if !current_user.is_admin?
+          flash[:danger] = "You need admin right to visit this page."
+          redirect_to user_path(current_user)
+        end
+      else
         flash[:danger] = "You need admin right to visit this page."
         redirect_to root_path
       end

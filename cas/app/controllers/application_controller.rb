@@ -16,4 +16,16 @@ class ApplicationController < ActionController::Base
       redirect_to login_path
     end
   end
+  
+  def require_admin
+    if logged_in? 
+      if !current_user.is_admin?
+        flash[:danger] = "You need admin right to visit this page."
+        redirect_to user_path(current_user)
+      end
+    else
+      flash[:danger] = "You need admin right to visit this page."
+      redirect_to root_path
+    end
+  end
 end

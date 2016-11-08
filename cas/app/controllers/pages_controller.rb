@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  before_action :require_admin, only:[:admin_main]
   def root
     if session[:user_id]==nil
       redirect_to login_path

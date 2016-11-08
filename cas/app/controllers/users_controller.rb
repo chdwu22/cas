@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_role]
-  #before_action :require_user, except: [:new, :show]
   before_action :require_same_user, only: [:show, :edit, :update]
   before_action :require_admin, only:[:index, :destroy]
   
@@ -81,18 +80,6 @@ class UsersController < ApplicationController
     def require_same_user 
       if current_user != @user and !current_user.is_admin?
         flash[:danger] = "You have no permission to visit this page."
-        redirect_to root_path
-      end
-    end
-    
-    def require_admin
-      if logged_in? 
-        if !current_user.is_admin?
-          flash[:danger] = "You need admin right to visit this page."
-          redirect_to user_path(current_user)
-        end
-      else
-        flash[:danger] = "You need admin right to visit this page."
         redirect_to root_path
       end
     end

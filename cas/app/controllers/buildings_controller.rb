@@ -1,5 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :set_building, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin
 
   # GET /buildings
   # GET /buildings.json
@@ -25,29 +26,22 @@ class BuildingsController < ApplicationController
   # POST /buildings.json
   def create
     @building = Building.new(building_params)
-
-    respond_to do |format|
-      if @building.save
-        format.html { redirect_to @building, notice: 'Building was successfully created.' }
-        format.json { render :show, status: :created, location: @building }
-      else
-        format.html { render :new }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
-      end
+    if @building.save
+      flash[:success] = 'Building was successfully created.'
+      redirect_to buildings_path
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /buildings/1
   # PATCH/PUT /buildings/1.json
   def update
-    respond_to do |format|
-      if @building.update(building_params)
-        format.html { redirect_to @building, notice: 'Building was successfully updated.' }
-        format.json { render :show, status: :ok, location: @building }
-      else
-        format.html { render :edit }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
-      end
+    if @building.update(building_params)
+      flash[:success] = 'Building was successfully updated.'
+      redirect_to building_path(@building)
+    else
+      render :edit
     end
   end
 
@@ -55,10 +49,8 @@ class BuildingsController < ApplicationController
   # DELETE /buildings/1.json
   def destroy
     @building.destroy
-    respond_to do |format|
-      format.html { redirect_to buildings_url, notice: 'Building was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:danger] = 'Building was successfully destroyed.'
+    redirect_to buildings_url
   end
 
   private

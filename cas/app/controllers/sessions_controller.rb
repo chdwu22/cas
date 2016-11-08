@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
         if !user.is_admin
           redirect_to user_path(:id => user.id)
         else
-          redirect_to users_path
+          redirect_to admin_main_path
         end
       else
         flash.now[:danger] = "Fail to log in."

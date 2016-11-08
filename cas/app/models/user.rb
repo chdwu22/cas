@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :courses
+  
   before_save { self.email = email.downcase}
   
   validates :first_name, presence: true, length: { minimum: 2, maximum: 25 }

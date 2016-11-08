@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_role]
-
+  before_action :require_user
+  before_action :require_same_user, only: [:show, :edit, :update]
+  before_action :require_admin, only:[:index, :destroy]
+  
   # GET /users
   # GET /users.json
   def index
@@ -72,5 +75,19 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:first_name, :last_name, :full_name, :is_admin, :email, :password)
+    end
+    
+    def require_same_user
+      if current_user != @user
+        flash[:danger] = "You have no permission to visit this page."
+        redirect_to root_path
+      end
+    end
+    
+    def require_admin
+      if !current_user.is_admin
+        flash[:danger] = "You need admin right to visit this page."
+        redirect_to root_path
+      end
     end
 end

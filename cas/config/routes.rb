@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :rooms
+  resources :buildings
   root to: 'pages#root'
   
   get 'admin_main', to: 'pages#admin_main'

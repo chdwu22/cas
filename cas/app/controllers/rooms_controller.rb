@@ -6,6 +6,7 @@ class RoomsController < ApplicationController
   # GET /rooms.json
   def index
     @rooms = Room.all
+    @bulidings = Building.pluck(:name, :id)
   end
 
   # GET /rooms/1
@@ -16,6 +17,7 @@ class RoomsController < ApplicationController
   # GET /rooms/new
   def new
     @room = Room.new
+    @buildings = Building.pluck(:name, :id)
   end
 
   # GET /rooms/1/edit
@@ -26,15 +28,11 @@ class RoomsController < ApplicationController
   # POST /rooms.json
   def create
     @room = Room.new(room_params)
-
-    respond_to do |format|
-      if @room.save
-        format.html { redirect_to @room, notice: 'Room was successfully created.' }
-        format.json { render :show, status: :created, location: @room }
-      else
-        format.html { render :new }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
+    if @room.save
+      flash[:success] = 'Room was successfully created.'
+      redirect_to @room
+    else
+      render :new
     end
   end
 

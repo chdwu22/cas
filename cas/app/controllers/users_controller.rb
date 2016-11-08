@@ -27,15 +27,13 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.full_name = @user.first_name + " " + @user.last_name
 
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
+
+   if @user.save
+     flash[:success] = 'User was successfully created.'
+     redirect_to @user
+   else
+     render :new
+   end
   end
 
   # PATCH/PUT /users/1
@@ -51,7 +49,7 @@ class UsersController < ApplicationController
         redirect_to users_path
       end
     else
-      flash[:notice] = "Failed to add faculty."
+      flash[:danger] = "Failed to add faculty."
       render :edit
     end
   end
@@ -60,10 +58,8 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:danger] = 'User was successfully deleted.'
+    redirect_to users_url
   end
   
   def change_role

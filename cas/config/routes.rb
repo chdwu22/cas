@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'sessions#new'
+  root to: 'root#index'
   
   resources :users
   get 'change_role', to: 'users#change_role'

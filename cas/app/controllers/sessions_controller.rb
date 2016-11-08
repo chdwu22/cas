@@ -14,11 +14,11 @@ class SessionsController < ApplicationController
           redirect_to users_path
         end
       else
-        flash.now[:notice] = "Error logging in."
+        flash.now[:danger] = "Fail to log in."
         render :new
       end
     else
-      flash.now[:notice] = "Error logging in."
+      flash.now[:danger] = "Fail to log in."
       render :new
     end
   end

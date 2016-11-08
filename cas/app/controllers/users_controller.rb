@@ -26,14 +26,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.full_name = @user.first_name + " " + @user.last_name
-
-
-   if @user.save
-     flash[:success] = 'User was successfully created.'
-     redirect_to @user
-   else
-     render :new
-   end
+    if @user.save
+      flash[:success] = 'You have successfully signed up.'
+      redirect_to @user
+    else
+      render :new
+    end
   end
 
   # PATCH/PUT /users/1

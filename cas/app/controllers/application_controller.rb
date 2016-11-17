@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
-  helper_method :current_user, :logged_in?, :current_year, :current_semester
+  helper_method :current_user, :logged_in?, :current_year, :current_semester, :format_time
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -35,5 +35,12 @@ class ApplicationController < ActionController::Base
   
   def current_semester
     Systemvariable.find_by(:name=>"scheduling_semester").value
+  end
+  
+  def format_time(ts)
+    time_slot = ts.value.split('-')
+    ft = time_slot[0].to_i
+    tt = time_slot[1].to_i
+    (ft/100).to_s + ":" + (ft%100).to_s + "-" + (tt/100).to_s + ":" + (tt%100).to_s
   end
 end

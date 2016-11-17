@@ -1,0 +1,31 @@
+<%= form_tag("/create_day", method: "get") do %>
+  <div class="field">
+    <%= label_tag(:day, "Add Day or Day Combo") %>
+    <%= text_field_tag(:day) %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Add") %>
+  </div>
+  
+
+  <div>
+    <% if @days.count>0 %>
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @days.each do |day| %>
+            <tr>
+              <td><%= day.value %><br></td>
+              <td><%= link_to 'Delete', delete_day_path(:id=>day.id), data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+<% end %>

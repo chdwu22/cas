@@ -1,0 +1,33 @@
+<%= form_tag("/create_time", method: "get") do %>
+  <div class="field">
+    <%= label_tag(:from_time, "From")%>
+    <%= number_field_tag(:from_time)%>
+    <%= label_tag(:to_time, "To") %>
+    <%= number_field_tag(:to_time) %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Add") %>
+  </div>
+  
+
+  <div>
+    <% if @times.count>0 %>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @times.each do |time| %>
+            <tr>
+              <td><%= format_time(time) %><br></td>
+              <td><%= link_to 'Delete', delete_time_path(:id=>time.id), data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+<% end %>

@@ -13,4 +13,69 @@ class SystemvariablesController < ApplicationController
     @semester.save
     redirect_to root_path
   end
+  
+  def new_day
+    @days = Systemvariable.where(:name =>"day")
+  end
+  
+  def create_day
+    day = Systemvariable.find_by(:value =>params[:day])
+    if day==nil
+      @day = Systemvariable.new(:name=>"day", :value=>params[:day])
+      @day.save
+      redirect_to new_day_path
+    else
+      flash[:danger] = "#{params[:day]} already exists"
+      redirect_to new_day_path
+    end
+  end
+  
+  def delete_day
+    @day = Systemvariable.find(params[:id])
+    @day.destroy
+    redirect_to new_day_path
+  end
+  
+  def new_time
+    @times = Systemvariable.where(:name =>"time")
+  end
+  
+  def create_time
+    if !overlapping?
+      new_time_slot = params[:from_time]+'-'+params[:to_time]
+      @time = Systemvariable.new(:name=>"time", :value=>new_time_slot)
+      @time.save
+      redirect_to new_time_path
+    else
+      flash[:danger] = "#{params[:time]} overlaps existing time slot"
+      redirect_to new_time_path
+    end
+  end
+  
+  def delete_time
+    @time = Systemvariable.find(params[:id])
+    @time.destroy
+    redirect_to new_time_path
+  end
+  
+  def overlapping?
+    @times = Systemvariable.where(:name =>"time")
+    return false if @times.empty?
+    new_from_time = params[:from_time].to_i
+    new_to_time = params[:to_time].to_i
+    @times.each do |time|
+      time_slot = time.value.split('-')
+      existing_from_time = time_slot[0].to_i
+      existing_to_time = time_slot[1].to_i
+      return true if (inside?(existing_from_time, existing_to_time, new_from_time) || 
+                      inside?(existing_from_time, existing_to_time, new_to_time) ||
+                      inside?(new_from_time, new_to_time, existing_from_time) ||
+                      new_from_time==existing_from_time || new_to_time==existing_to_time)
+    end
+    return false
+  end
+  
+  def inside?(from, to, target)
+    target > from && target < to
+  end
 end

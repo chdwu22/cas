@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Day:</strong>
+  <%= @timeslot.day %>
+</p>
+
+<p>
+  <strong>From time:</strong>
+  <%= @timeslot.from_time %>
+</p>
+
+<p>
+  <strong>To time:</strong>
+  <%= @timeslot.to_time %>
+</p>
+
+<%= link_to 'Edit', edit_timeslot_path(@timeslot) %> |
+<%= link_to 'Back', timeslots_path %>

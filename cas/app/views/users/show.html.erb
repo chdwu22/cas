@@ -18,7 +18,7 @@
             <tr>
               <td><%= format_time(time) %><br></td>
               <% @days.each do |day| %>
-                <td><%= f.select(:last_name, options_for_select([['Preferred',1], ['Acceptable',2], ['Unacceptable', 3]], :selected => 2)) %> </td>
+                <td><%= f.select(:last_name, options_for_select([['Preferred',1], ['Acceptable',2], ['Unacceptable', 3]])) %> </td>
               <% end %>
             </tr>
           <% end %>

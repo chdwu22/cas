@@ -12,6 +12,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @days = Systemvariable.where(:name =>"day")
+    @times = Systemvariable.where(:name =>"time")
+    @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
+    @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
   end
 
   # GET /users/new

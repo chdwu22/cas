@@ -78,4 +78,27 @@ class SystemvariablesController < ApplicationController
   def inside?(from, to, target)
     target > from && target < to
   end
+  
+  def faculty_edit_permission
+    @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
+    if @faculty_permission.value=="yes"
+      @faculty_permission.value="no"
+    else
+      @faculty_permission.value="yes"
+    end
+    @faculty_permission.save
+    redirect_to root_path
+  end
+  
+  def unacceptable_time_slot_limit
+    @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+  end
+  
+  def set_unacceptable_limit
+    @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+    @unacceptable_time_slot_limit.value = params[:limit]
+    @unacceptable_time_slot_limit.save
+    flash[:success] = "New limit has set to #{@unacceptable_time_slot_limit.value}"
+    redirect_to unacceptable_time_slot_limit_path
+  end
 end

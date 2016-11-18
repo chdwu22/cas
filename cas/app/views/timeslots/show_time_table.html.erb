@@ -2,16 +2,16 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th> </th>
+      <th width="100px"> </th>
       <% @days.each do |day| %>
-        <th> <%= day.value %> </th>
+        <th width="100px"> <%= day %> </th>
       <% end %>
     </tr>
   </thead>
   <tbody>
     <% @times.each do |time| %>
       <tr>
-        <td><%= format_time(time) %><br></td>
+        <td><%= (time[0]/100).to_s + ":" + (time[0]%100).to_s + "-" + (time[1]/100).to_s + ":" + (time[1]%100).to_s %><br></td>
         <% @days.each do |day| %>
           <td></td>
         <% end %>

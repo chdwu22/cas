@@ -1,0 +1,14 @@
+<div>
+  <h4>Current unacceptable time slot limit is: <%=@unacceptable_time_slot_limit.value%></h4>
+</div>
+<div>
+<%= form_tag("/set_unacceptable_limit", method: "get") do %>
+  <div class="field">
+    <%= label_tag(:limit, "Set new limit:") %>
+    <%= number_field_tag(:limit) %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Update") %>
+  </div>
+<% end %>
+</div>

@@ -79,8 +79,10 @@ class TimeslotsController < ApplicationController
   end
   
   def show_time_table
-    @days = Systemvariable.where(:name =>"day")
-    @times = Systemvariable.where(:name =>"time")
+    @days = Timeslot.pluck(:day).uniq
+    @times = Timeslot.pluck(:from_time, :to_time).uniq
+    #@days = Systemvariable.where(:name =>"day")
+    #@times = Systemvariable.where(:name =>"time")
   end
 
   private

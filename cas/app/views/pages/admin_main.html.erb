@@ -36,9 +36,10 @@
   </div>
   <div class="col-sm-2">
     <dl>
-      <dt>Placeholder</dt>
-      <dd><%= link_to 'Add Placeholder', new_user_path %></dd>
-      <dd><%= link_to 'Placeholder list', users_path %></dd>
+      <dt>Faculty preferences</dt>
+      <% permission = @faculty_permission.value %>
+      <dd><%= link_to "Allow faculty edit (#{permission})", faculty_edit_permission_path %></dd>
+      <dd><%= link_to 'Set "unacceptable" limit', unacceptable_time_slot_limit_path %></dd>
     </dl>
   </div>
   <div class="col-sm-2">

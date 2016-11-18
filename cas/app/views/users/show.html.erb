@@ -1,8 +1,8 @@
 <h3 align="center"><%= @user.full_name %></h3>
 
 <% if @faculty_permission.value=="yes" %>
-  <%= form_for(@timeslot_user, :html =>{class: "form-horizontal", role: "form"}) do |f| %>
-    <div class="well col-xs-10 col-xs-offset-2">
+  <%= form_for(@user, :html =>{class: "form-horizontal", role: "form"}) do |f| %>
+    <div class="well col-xs-12 col-xs-offset-1">
       <h4>Maximum "unacceptable" time slot is limited to: <%= @unacceptable_time_slot_limit.value%></h4>
       <table class="table table-bordered">
         <thead>
@@ -18,7 +18,7 @@
             <tr>
               <td><%= format_time(time) %><br></td>
               <% @days.each do |day| %>
-                <td> </td>
+                <td><%= f.select(:last_name, options_for_select([['Preferred',1], ['Acceptable',2], ['Unacceptable', 3]], :selected => 2)) %> </td>
               <% end %>
             </tr>
           <% end %>

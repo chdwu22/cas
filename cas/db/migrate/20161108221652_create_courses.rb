@@ -9,8 +9,8 @@ class CreateCourses < ActiveRecord::Migration[5.0]
       t.string :time
       t.integer :year
       t.string :semester
-      t.integer :room_id
-      t.integer :user_id
+      t.integer :room_id, :null=>true
+      t.integer :user_id, :null=>true
 
       t.timestamps
     end

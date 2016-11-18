@@ -19,6 +19,8 @@ class CoursesController < ApplicationController
 
   # GET /courses/1/edit
   def edit
+    @users = User.pluck(:full_name, :id)
+    @rooms = Room.pluck(:number, :id)
   end
 
   # POST /courses
@@ -27,13 +29,13 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
     @course.year = current_year.to_i
     @course.semester = current_semester
-    @course.room = 0
-    @course.user = 0
+    @course.room_id = 1
+    @course.user_id = 1
 
     respond_to do |format|
       if @course.save
-        format.html { redirect_to @course, notice: 'Course was successfully created.' }
-        format.json { render :show, status: :created, location: @course }
+        format.html { redirect_to courses_path, notice: 'Course was successfully created.' }
+        format.json { render :show, status: :created, location: courses_path }
       else
         format.html { render :new }
         format.json { render json: @course.errors, status: :unprocessable_entity }

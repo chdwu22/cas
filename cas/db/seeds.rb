@@ -15,3 +15,6 @@ variables = [{:name => 'unacceptable_time_slot_limit', :value => '6'},
 variables.each do |v|
   Systemvariable.create!(v)
 end
+
+
+User.create!({:first_name => 'super', :last_name => 'admin', :full_name=>'super admin',:is_admin=>true, :email=>'admin@tamu.edu', :password=>"asdf"})

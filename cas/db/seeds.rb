@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+variables = [{:name => 'unacceptable_time_slot_limit', :value => '6'},
+    	       {:name => 'scheduling_year', :value => '2017'},
+    	       {:name => 'scheduling_semester', :value => 'Fall'},
+      	     {:name => 'enable_faculty_edit?', :value => 'yes'}
+  	 ]
+
+variables.each do |v|
+  Systemvariable.create!(v)
+end

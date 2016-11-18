@@ -25,6 +25,10 @@ class CoursesController < ApplicationController
   # POST /courses.json
   def create
     @course = Course.new(course_params)
+    @course.year = current_year.to_i
+    @course.semester = current_semester
+    @course.room = 0
+    @course.user = 0
 
     respond_to do |format|
       if @course.save

@@ -75,6 +75,7 @@ class SystemvariablesController < ApplicationController
     return false
   end
   
+  #check if a specific point in time, target, is in between a time frame, from-to.
   def inside?(from, to, target)
     target > from && target < to
   end

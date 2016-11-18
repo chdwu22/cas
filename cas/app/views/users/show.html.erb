@@ -1,7 +1,7 @@
 <h3 align="center"><%= @user.full_name %></h3>
 
 <% if @faculty_permission.value=="yes" %>
-  <%= form_for(@user, :html =>{class: "form-horizontal", role: "form"}) do |f| %>
+  <%= form_for(@timeslot_user, :html =>{class: "form-horizontal", role: "form"}) do |f| %>
     <div class="well col-xs-10 col-xs-offset-2">
       <h4>Maximum "unacceptable" time slot is limited to: <%= @unacceptable_time_slot_limit.value%></h4>
       <table class="table table-bordered">
@@ -18,13 +18,14 @@
             <tr>
               <td><%= format_time(time) %><br></td>
               <% @days.each do |day| %>
-                <td></td>
+                <td> </td>
               <% end %>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+    submit button
   <% end %>
 <% else %>
   <h1>only view</h1>

@@ -6,7 +6,6 @@ class RoomsController < ApplicationController
   # GET /rooms.json
   def index
     @rooms = Room.all
-    @bulidings = Building.pluck(:name, :id)
   end
 
   # GET /rooms/1
@@ -30,7 +29,7 @@ class RoomsController < ApplicationController
     @room = Room.new(room_params)
     if @room.save
       flash[:success] = 'Room was successfully created.'
-      redirect_to @room
+      redirect_to rooms_path
     else
       render :new
     end

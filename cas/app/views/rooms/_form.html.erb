@@ -2,7 +2,7 @@
 <%= form_for(room) do |f| %>
   <div class="field">
     <%= f.label "building" %>
-    <%= f.number_field :building_id %>
+    <%= f.select :building_id, options_for_select(@buildings) %>
   </div>
   
   <div class="field">

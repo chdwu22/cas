@@ -4,9 +4,7 @@
 </div><br><br>
 
 <% @timeslot_current_user.each do |tcu| %>
-  <%= tcu.timeslot.day%>-
-  <%= tcu.timeslot.from_time%>-
-  <%= tcu.timeslot.to_time%>
+  <%= tcu.timeslot.day%>-<%= tcu.timeslot.from_time%>-<%= tcu.timeslot.to_time%>-<%= tcu.preference_type%> 
 <% end %>
 <br>
 <%= @preferences.to_s %>

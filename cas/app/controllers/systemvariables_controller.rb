@@ -87,8 +87,14 @@ class SystemvariablesController < ApplicationController
     else
       @faculty_permission.value="yes"
     end
-    @faculty_permission.save
-    redirect_to root_path
+    if @faculty_permission.save
+      if @faculty_permission.value=="yes"
+        flash[:success] = "ENABLED faculty to change preferences."
+      else
+        flash[:danger] = "DISABLED faculty to change preferences."
+      end
+      redirect_to root_path
+    end
   end
   
   def unacceptable_time_slot_limit

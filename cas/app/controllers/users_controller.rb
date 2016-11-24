@@ -20,6 +20,7 @@ class UsersController < ApplicationController
     
     
     if !@timeslot_current_user.empty?
+      debugstr = ""
       count=0
       order_matched_hash = {}
       @times.each do |t|
@@ -30,11 +31,14 @@ class UsersController < ApplicationController
             if(d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time)
               order_matched_hash[count] = @timeslot_current_user[count].preference_type
               count += 1
+              if(count==1)
+                debugstr = d.value + "-" + ft.to_s + "-"+ tt.to_s + '-' + @timeslot_current_user[count].preference_type.to_s
+              end
             end
           end
         end
       end
-      flash[:success] = order_matched_hash.to_s
+      flash[:success] = debugstr + '-' + order_matched_hash.to_s
       
       index = 0
       @preferences = []

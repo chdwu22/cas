@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
   
   def format_time(ts)
-    time_slot = ts.value.split('-')
+    time_slot = ts.split('-')
     ft = time_slot[0].to_i
     tt = time_slot[1].to_i
     (ft/100).to_s + ":" + (ft%100).to_s + "-" + (tt/100).to_s + ":" + (tt%100).to_s

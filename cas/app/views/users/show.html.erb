@@ -1,44 +1,62 @@
 <h3 align="center"><%= @user.full_name %></h3>
 <div align="center">
   <%= link_to 'Edit profile', edit_user_path(@user), class: 'btn btn-default btn-sm'%>
-</div>
+</div><br><br>
 
-<% if @faculty_permission.value=="yes" %>
-  <%= form_tag("/users", method: "get") do %>
-    <div class="well col-xs-12 col-xs-offset-1">
-      <h4>Maximum "unacceptable" time slot is limited to: <%= @unacceptable_time_slot_limit.value%></h4>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th width="100px"> </th>
-            <% @days.each do |day| %>
-              <th  width="100px"> <%= day.value %> </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
+<%= form_tag("/set_preference", method: "get") do %>
+  <%= hidden_field_tag :id, @user.id %>
+  <div class="well col-xs-8 col-xs-offset-1">
+    <h5>Maximum "unacceptable" time slot is limited to: <b><%= @unacceptable_time_slot_limit.value%></b></h5>
+    <h5><b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th width="100px"> </th>
+          <% @days.each do |day| %>
+            <th  width="100px"> <%= day.value %> </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @timeslot_current_user.empty? %>
           <% @times.each do |time| %>
             <tr>
-              <td><%= format_time(time) %><br></td>
+              <td><%= format_time(time.value) %><br></td>
               <% @days.each do |day| %>
-                <td><%= select_tag("#{day.value}-#{time.value}".to_sym, options_for_select([['Preferred',1], ['Acceptable',2], ['Unacceptable', 3]],2)) %> </td>
+                <% if @faculty_permission.value=="yes" %>
+                  <td><%= select_tag("pref-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
+                <% else %>
+                  <td>A</td>
+                <% end %>
               <% end %>
             </tr>
           <% end %>
-        </tbody>
-      </table>
+        <% else %>
+          <% row_index = 0 %>
+          <% @times.each do |time| %>
+            <tr>
+              <td><%= format_time(time.value) %><br></td>
+              <% pref_current_row =  pref_current_row = @preferences[row_index] %>
+              <% row_index = row_index + 1 %>
+              <% col_index = 0 %>
+              <% @days.each do |day| %>
+                <% if @faculty_permission.value=="yes" %>
+                  <% if pref_current_row[col_index] ==1 %> <td bgcolor="#CCFFCC"> <% end %> <% if pref_current_row[col_index] ==2 %> <td> <% end %> <% if pref_current_row[col_index] ==3 %> <td bgcolor="#FFCCCC"> <% end %>
+                  <%= select_tag("pref-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], pref_current_row[col_index])) %> </td>
+                <% else %>
+                  <td><% if pref_current_row[col_index] ==1 %> P <% end %> <% if pref_current_row[col_index] ==2 %> A <% end %> <% if pref_current_row[col_index] ==3 %> U <% end %></td>
+                <% end %>
+                <% col_index = col_index + 1 %>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @faculty_permission.value=="yes" %>
       <%= submit_tag("Update preferences", class: 'btn btn-default' )%>
-    </div>
-  <% end %>
-<% else %>
-  <h1>only view</h1>
+    <% else %>
+      <%= submit_tag("View Only", disabled: true, class: 'btn btn-default' )%> 
+    <% end %>
+  </div>
 <% end %>
-
-<br><br><br>
-<div align="center" class="col-xs-offset-2">
-  <%= debug(params) if Rails.env.development? %>
-</div>
-
-
-
-  

@@ -1,19 +1,19 @@
 <div class="row">
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Courses</dt>
       <dd><%= link_to 'Add course', new_course_path %></dd>
       <dd><%= link_to 'Course list', courses_path %></dd>
     </dl>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Faculty</dt>
       <dd><%= link_to 'Add faculty', new_user_path %></dd>
       <dd><%= link_to 'Faculty list', users_path %></dd>
     </dl>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Rooms</dt>
       <dd><%= link_to 'Add building', new_building_path %></dd>
@@ -25,7 +25,7 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Time Slots</dt>
       <dd><%= link_to 'Add Days', new_day_path %></dd>
@@ -34,15 +34,16 @@
       <dd><%= link_to 'View time table', time_table_path %></dd>
     </dl>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Faculty preferences</dt>
       <% permission = @faculty_permission.value %>
       <dd><%= link_to "Allow faculty edit (#{permission})", faculty_edit_permission_path %></dd>
       <dd><%= link_to 'Set "unacceptable" limit', unacceptable_time_slot_limit_path %></dd>
+      <dd><%= link_to 'Set "preferred" limit', preferred_time_slot_limit_path %></dd>
     </dl>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <dl>
       <dt>Placeholder</dt>
       <dd><%= link_to 'Add Placeholder', new_user_path %></dd>

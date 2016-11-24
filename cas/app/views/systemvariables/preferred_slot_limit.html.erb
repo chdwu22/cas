@@ -1,0 +1,14 @@
+<div>
+  <h4>Current preferred time slot limit is: <%=@preferred_slot_limit.value%></h4>
+</div>
+<div>
+<%= form_tag("/set_preferred_limit", method: "get") do %>
+  <div class="field">
+    <%= label_tag(:limit, "Set new limit:") %>
+    <%= number_field_tag(:limit) %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Update") %>
+  </div>
+<% end %>
+</div>

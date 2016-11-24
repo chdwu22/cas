@@ -102,4 +102,16 @@ class SystemvariablesController < ApplicationController
     flash[:success] = "New limit has set to #{@unacceptable_time_slot_limit.value}"
     redirect_to unacceptable_time_slot_limit_path
   end
+  
+  def preferred_slot_limit
+    @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
+  end
+  
+  def set_preferred_limit
+    @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
+    @preferred_slot_limit.value = params[:limit]
+    @preferred_slot_limit.save
+    flash[:success] = "New limit has set to #{@preferred_slot_limit.value}"
+    redirect_to preferred_time_slot_limit_path
+  end
 end

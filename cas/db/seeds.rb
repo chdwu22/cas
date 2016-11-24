@@ -9,7 +9,8 @@
 variables = [{:name => 'unacceptable_time_slot_limit', :value => '6'},
     	       {:name => 'scheduling_year', :value => '2017'},
     	       {:name => 'scheduling_semester', :value => 'Fall'},
-      	     {:name => 'enable_faculty_edit?', :value => 'yes'}
+      	     {:name => 'enable_faculty_edit?', :value => 'yes'},
+      	     {:name => 'preferred_time_slot_limit', :value => '3'}
   	 ]
 
 variables.each do |v|

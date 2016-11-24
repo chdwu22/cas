@@ -28,7 +28,11 @@ Rails.application.routes.draw do
   get 'faculty_edit_permission', to:'systemvariables#faculty_edit_permission'
   get 'unacceptable_time_slot_limit', to:'systemvariables#unacceptable_time_slot_limit'
   get 'set_unacceptable_limit', to:'systemvariables#set_unacceptable_limit'
+  get 'preferred_time_slot_limit', to:'systemvariables#preferred_slot_limit'
+  get 'set_preferred_limit', to:'systemvariables#set_preferred_limit'
   
   get 'new_time_table', to:'timeslots#new_time_table'
   get 'time_table', to:'timeslots#show_time_table'
+  
+  get 'set_preference', to:'timeslot_users#set_preference'
 end

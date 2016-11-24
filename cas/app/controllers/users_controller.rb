@@ -19,7 +19,6 @@ class UsersController < ApplicationController
     @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id).includes(:timeslot)
     
     if !@timeslot_current_user.empty?
-      debug_s1=""
       count=0
       order_matched_array = []
       @times.each do |t|
@@ -30,12 +29,11 @@ class UsersController < ApplicationController
             if(d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time)
               order_matched_array << @timeslot_current_user[count].preference_type
               count += 1
-              debug_s1 << (d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time).to_s << ","
             end
           end
         end
       end
-      flash[:success] = (count.to_s << debug_s1)
+      flash[:success] = order_matched_array.to_s
       
       index = 0
       @preferences = []

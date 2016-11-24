@@ -4,10 +4,16 @@
 </div><br><br>
 
 <% @timeslot_current_user.each do |tcu| %>
-  <%= tcu.timeslot.day%>-<%= tcu.timeslot.from_time%>-<%= tcu.timeslot.to_time%>-<%= tcu.preference_type%> 
+  <%= tcu.timeslot.day%>-<%= tcu.timeslot.from_time%>-<%= tcu.timeslot.to_time%>-<%= tcu.preference_type%>
 <% end %>
 <br>
-<%= @preferences.to_s %>
+<%= @preferences.to_s %><br>
+<% @days.each do |d| %>
+  <%= d.value %> 
+<% end %><br>
+<% @times.each do |t| %>
+  <%= t.value %> 
+<% end %><br>
 
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>

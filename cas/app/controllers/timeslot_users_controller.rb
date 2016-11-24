@@ -21,8 +21,6 @@ class TimeslotUsersController < ApplicationController
         flash[:danger] = "You have selected #{preferred_count} preferred time slots. The limit is #{preferred_limit}"
       end
     else
-      debug2 = []
-      debug2 << "user Id:" << @user.id << "user name:" << @user.full_name
       @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id)
       if !@timeslot_current_user.empty?
         @timeslot_current_user.each do |tcs|
@@ -30,7 +28,6 @@ class TimeslotUsersController < ApplicationController
             if(tcs.timeslot_id==p[0])
               tcs.preference_type = p[1]
               tcs.save
-              debug2 << tcs.timeslot_id << p[1] 
             end
           end
         end
@@ -39,7 +36,7 @@ class TimeslotUsersController < ApplicationController
           TimeslotUser.create(:user_id=>@user.id, :timeslot_id=>p[0], :preference_type=>p[1])
         end
       end
-      #flash[:success] = "Preferences have successfully updated."
+      flash[:success] = "Preferences have successfully updated."
     end
     redirect_to user_path(@user)
   end
@@ -63,7 +60,6 @@ class TimeslotUsersController < ApplicationController
     end
     
   def paser_pref_params
-    debug1 = []
     @timeslots = Timeslot.all
     timeslot_user = {}
     params.each do |param|
@@ -75,14 +71,10 @@ class TimeslotUsersController < ApplicationController
         @timeslots.each do |ts|
           if(day==ts.day && start_time==ts.from_time && end_time==ts.to_time)
             timeslot_user[ts.id] = params[param].to_i
-            debug1 << ts.id << params[param]
-            
           end
         end
       end
     end
-    debug1 << debug1.count
-    flash[:danger] = timeslot_user.to_s
     return timeslot_user
   end
 end

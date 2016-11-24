@@ -16,21 +16,35 @@ class UsersController < ApplicationController
     @times = Systemvariable.where(:name =>"time")
     @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
-    @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id)
+    @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id).includes(:timeslot)
     
     if !@timeslot_current_user.empty?
       count=0
+      order_matched_array = []
+      @times.each do |t|
+        ft = t.value.split('-')[0].to_i
+        tt = t.value.split('-')[1].to_i
+        @days.each do |d|
+          @timeslot_current_user.each do |tcu|
+            if(d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time)
+              order_matched_array << @timeslot_current_user[count].preference_type
+              count = count + 1
+            end
+          end
+        end
+      end
+      
+      index = 0
       @preferences = []
       @times.each do |t|
         row = []
         @days.each do |d|
-          row << @timeslot_current_user[count].preference_type
-          count = count + 1
+          row << order_matched_array[index]
+          index += 1
         end
         @preferences << row
       end
     end
-    
   end
 
   # GET /users/new

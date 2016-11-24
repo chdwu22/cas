@@ -3,6 +3,14 @@
   <%= link_to 'Edit profile', edit_user_path(@user), class: 'btn btn-default btn-sm'%>
 </div><br><br>
 
+<% @timeslot_current_user.each do |tcu| %>
+  <%= tcu.timeslot.day%>-
+  <%= tcu.timeslot.from_time%>-
+  <%= tcu.timeslot.to_time%>
+<% end %>
+<br>
+<%= @preferences.to_s %>
+
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>
   <div class="well col-xs-8 col-xs-offset-1">

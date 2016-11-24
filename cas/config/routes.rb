@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :users
   get 'change_role', to: 'users#change_role'
   post 'change_role', to: 'users#update'
+  get 'assignment_by_faculty', to:'users#assignment_by_faculty'
   
   
   get 'login', to: 'sessions#new'

@@ -100,6 +100,11 @@ class UsersController < ApplicationController
   
   def change_role
   end
+  
+  def assignment_by_faculty
+    @users = User.all
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

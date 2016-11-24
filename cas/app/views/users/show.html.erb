@@ -11,7 +11,7 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th width="100px"> </th>
+          <th width="120px"> </th>
           <% @days.each do |day| %>
             <th  width="100px"> <%= day.value %> </th>
           <% end %>
@@ -24,7 +24,7 @@
               <td><%= format_time(time.value) %><br></td>
               <% @days.each do |day| %>
                 <% if @faculty_permission.value=="yes" %>
-                  <td><%= select_tag("pref-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
+                  <td><%= select_tag("prf-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
                 <% else %>
                   <td>A</td>
                 <% end %>
@@ -40,11 +40,11 @@
               <% row_index = row_index + 1 %>
               <% col_index = 0 %>
               <% @days.each do |day| %>
+                <% if pref_current_row[col_index] ==1 %> <td bgcolor="#CCFFCC"> <% end %> <% if pref_current_row[col_index] ==2 %> <td> <% end %> <% if pref_current_row[col_index] ==3 %> <td bgcolor="#FFCCCC"> <% end %>
                 <% if @faculty_permission.value=="yes" %>
-                  <% if pref_current_row[col_index] ==1 %> <td bgcolor="#CCFFCC"> <% end %> <% if pref_current_row[col_index] ==2 %> <td> <% end %> <% if pref_current_row[col_index] ==3 %> <td bgcolor="#FFCCCC"> <% end %>
-                  <%= select_tag("pref-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], pref_current_row[col_index])) %> </td>
+                  <%= select_tag("prf-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], pref_current_row[col_index])) %> </td>
                 <% else %>
-                  <td><% if pref_current_row[col_index] ==1 %> P <% end %> <% if pref_current_row[col_index] ==2 %> A <% end %> <% if pref_current_row[col_index] ==3 %> U <% end %></td>
+                  <% if pref_current_row[col_index] ==1 %> P <% end %> <% if pref_current_row[col_index] ==2 %> A <% end %> <% if pref_current_row[col_index] ==3 %> U <% end %></td>
                 <% end %>
                 <% col_index = col_index + 1 %>
               <% end %>

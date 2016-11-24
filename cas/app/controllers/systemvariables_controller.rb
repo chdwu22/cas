@@ -82,16 +82,16 @@ class SystemvariablesController < ApplicationController
   
   def faculty_edit_permission
     @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
-    if @faculty_permission.value=="yes"
-      @faculty_permission.value="no"
-    else
-      @faculty_permission.value="yes"
-    end
+  end
+  
+  def set_faculty_permission
+    @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
+    @faculty_permission.value=params[:fac_perm]
     if @faculty_permission.save
       if @faculty_permission.value=="yes"
         flash[:success] = "ENABLED faculty to change preferences."
       else
-        flash[:danger] = "DISABLED faculty to change preferences."
+        flash[:success] = "DISABLED faculty to change preferences."
       end
       redirect_to root_path
     end

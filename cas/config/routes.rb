@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'create_time', to:'systemvariables#create_time'
   get 'delete_time', to:'systemvariables#delete_time'
   get 'faculty_edit_permission', to:'systemvariables#faculty_edit_permission'
+  get 'set_faculty_permission', to:'systemvariables#set_faculty_permission'
   get 'unacceptable_time_slot_limit', to:'systemvariables#unacceptable_time_slot_limit'
   get 'set_unacceptable_limit', to:'systemvariables#set_unacceptable_limit'
   get 'preferred_time_slot_limit', to:'systemvariables#preferred_slot_limit'

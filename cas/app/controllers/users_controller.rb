@@ -18,29 +18,30 @@ class UsersController < ApplicationController
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
     @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id).includes(:timeslot)
     
+    
     if !@timeslot_current_user.empty?
       count=0
-      order_matched_array = []
+      order_matched_hash = {}
       @times.each do |t|
         ft = t.value.split('-')[0].to_i
         tt = t.value.split('-')[1].to_i
         @days.each do |d|
           @timeslot_current_user.each do |tcu|
             if(d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time)
-              order_matched_array << @timeslot_current_user[count].preference_type
+              order_matched_hash[count] = @timeslot_current_user[count].preference_type
               count += 1
             end
           end
         end
       end
-      flash[:success] = order_matched_array.to_s
+      flash[:success] = order_matched_hash.to_s
       
       index = 0
       @preferences = []
       @times.each do |t|
         row = []
         @days.each do |d|
-          row << order_matched_array[index]
+          row << order_matched_hash[index]
           index += 1
         end
         @preferences << row

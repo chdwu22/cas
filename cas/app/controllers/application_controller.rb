@@ -41,6 +41,8 @@ class ApplicationController < ActionController::Base
     time_slot = ts.split('-')
     ft = time_slot[0].to_i
     tt = time_slot[1].to_i
-    (ft/100).to_s + ":" + (ft%100).to_s + "-" + (tt/100).to_s + ":" + (tt%100).to_s
+    start_min = (ft%100 ==0)? "00" : (ft%100).to_s
+    end_min = (tt%100 ==0)? "00" : (tt%100).to_s
+    (ft/100).to_s + ":" + start_min + "-" + (tt/100).to_s + ":" + end_min.to_s
   end
 end

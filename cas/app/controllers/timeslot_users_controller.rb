@@ -22,7 +22,7 @@ class TimeslotUsersController < ApplicationController
       end
     else
       debug2 = []
-      debug2 << "user Id:" << @user.id << "user name:" << @user.full_name << ","
+      debug2 << "user Id:" << @user.id << "user name:" << @user.full_name
       @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id)
       if !@timeslot_current_user.empty?
         @timeslot_current_user.each do |tcs|
@@ -30,7 +30,7 @@ class TimeslotUsersController < ApplicationController
             if(tcs.timeslot_id==p[0])
               tcs.preference_type = p[1]
               tcs.save
-              debug2 << tcs.timeslot_id << p[0] 
+              debug2 << tcs.timeslot_id << p[1] 
             end
           end
         end
@@ -41,7 +41,7 @@ class TimeslotUsersController < ApplicationController
       end
       flash[:success] = debug2.to_s #"Preferences have successfully updated."
     end
-    redirect_to user_path(@user)
+    #redirect_to user_path(@user)
   end
   
   private

@@ -21,7 +21,6 @@ class UsersController < ApplicationController
     
     
     if !@timeslot_current_user.empty?
-      debugstr = ""
       count=0
       order_matched_hash = {}
       @times.each do |t|

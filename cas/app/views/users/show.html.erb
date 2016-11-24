@@ -3,23 +3,12 @@
   <%= link_to 'Edit profile', edit_user_path(@user), class: 'btn btn-default btn-sm'%>
 </div><br><br>
 
-<% @timeslot_current_user.each do |tcu| %>
-  <%= tcu.timeslot.day%>-<%= tcu.timeslot.from_time%>-<%= tcu.timeslot.to_time%>-<%= tcu.preference_type%>
-<% end %>
-<br>
-<%= @preferences.to_s %><br>
-<% @days.each do |d| %>
-  <%= d.value %> 
-<% end %><br>
-<% @times.each do |t| %>
-  <%= t.value %> 
-<% end %><br>
-
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>
   <div class="well col-xs-8 col-xs-offset-1">
-    <h5>Maximum "unacceptable" time slot is limited to: <b><%= @unacceptable_time_slot_limit.value%></b></h5>
     <h5><b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable</h5>
+    <h5>Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b></h5>
+    <h5>Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b></h5>
     <table class="table table-bordered">
       <thead>
         <tr>

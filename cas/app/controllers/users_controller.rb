@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     @times = Systemvariable.where(:name =>"time")
     @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+    @preferred_time_slot_limit =  Systemvariable.find_by(:name=>"preferred_time_slot_limit")
     @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id).includes(:timeslot)
     
     
@@ -35,7 +36,6 @@ class UsersController < ApplicationController
           end
         end
       end
-      flash[:success] = order_matched_hash.to_s
       
       index = 0
       @preferences = []

@@ -5,10 +5,10 @@
 <%= form_tag("/set_faculty_permission", method: "get") do %>
   <div class="actions">
     <% if @faculty_permission.value=="yes" %>
-      <%= submit_tag("DISABLE faculty permission edit", class: 'btn btn-default' )%>
+      <%= submit_tag("DISABLE faculty preference edit", class: 'btn btn-default' )%>
       <%= hidden_field_tag :fac_perm, "no" %>
     <% else %>
-      <%= submit_tag("ENABLE faculty permission edit", class: 'btn btn-default' )%>
+      <%= submit_tag("ENABLE faculty preference edit", class: 'btn btn-default' )%>
       <%= hidden_field_tag :fac_perm, "yes" %>
     <% end %>
   </div>

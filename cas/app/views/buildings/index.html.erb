@@ -16,9 +16,11 @@
         <% @buildings.each do |building| %>
           <tr>
             <td><%= building.name %></td>
-            <td><%= link_to 'Show', building %></td>
-            <td><%= link_to 'Edit', edit_building_path(building) %></td>
-            <td><%= link_to 'Delete', building, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% if building.id !=1 %>
+              <td><%= link_to 'Show', building %></td>
+              <td><%= link_to 'Edit', edit_building_path(building) %></td>
+              <td><%= link_to 'Delete', building, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

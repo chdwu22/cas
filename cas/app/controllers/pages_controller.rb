@@ -17,4 +17,7 @@ class PagesController < ApplicationController
   def admin_main
     @faculty_permission = Systemvariable.find_by(:name=>"enable_faculty_edit?")
   end
+  
+  def assignment_table
+  end
 end

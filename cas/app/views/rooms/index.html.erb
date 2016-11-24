@@ -20,9 +20,11 @@
             <td><%= room.building.name %></td>
             <td><%= room.number %></td>
             <td><%= room.capacity %></td>
-            <td><%= link_to 'Show', room %></td>
-            <td><%= link_to 'Edit', edit_room_path(room) %></td>
-            <td><%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% if room.id !=1 %>
+              <td><%= link_to 'Show', room %></td>
+              <td><%= link_to 'Edit', edit_room_path(room) %></td>
+              <td><%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

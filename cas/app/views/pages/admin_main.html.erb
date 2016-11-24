@@ -1,13 +1,6 @@
 <div class="row">
   <div class="col-sm-3">
     <dl>
-      <dt>Courses</dt>
-      <dd><%= link_to 'Add course', new_course_path %></dd>
-      <dd><%= link_to 'Course list', courses_path %></dd>
-    </dl>
-  </div>
-  <div class="col-sm-3">
-    <dl>
       <dt>Faculty</dt>
       <dd><%= link_to 'Add faculty', new_user_path %></dd>
       <dd><%= link_to 'Faculty list', users_path %></dd>
@@ -22,7 +15,15 @@
       <dd><%= link_to 'Room list', rooms_path %></dd>
     </dl>
   </div>
+  <div class="col-sm-3">
+    <dl>
+      <dt>Courses</dt>
+      <dd><%= link_to 'Add course', new_course_path %></dd>
+      <dd><%= link_to 'Course list', courses_path %></dd>
+    </dl>
+  </div>
 </div>
+
 
 <div class="row">
   <div class="col-sm-3">
@@ -44,9 +45,10 @@
   </div>
   <div class="col-sm-3">
     <dl>
-      <dt>Placeholder</dt>
-      <dd><%= link_to 'Add Placeholder', new_user_path %></dd>
-      <dd><%= link_to 'Placeholder list', users_path %></dd>
+      <dt>Assignments</dt>
+      <dd><%= link_to 'Assign course time', set_course_time_path %></dd>
+      <dd><%= link_to 'Assign room to courses', assign_room_path %></dd>
+      <dd><%= link_to 'View assignments', assignment_table_path %></dd>
     </dl>
   </div>
 </div>

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root to: 'pages#root'
   
   get 'admin_main', to: 'pages#admin_main'
+  get 'assignment_table', to:'pages#assignment_table'
   
   resources :users
   get 'change_role', to: 'users#change_role'
@@ -36,4 +37,7 @@ Rails.application.routes.draw do
   get 'time_table', to:'timeslots#show_time_table'
   
   get 'set_preference', to:'timeslot_users#set_preference'
+  
+  get 'assign_room', to:'courses#assign_room'
+  get 'set_course_time', to:'courses#set_course_time'
 end

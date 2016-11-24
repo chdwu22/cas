@@ -1,10 +1,11 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin
+  before_action :set_courses, only: [:index, :assign_room, :set_course_time]
 
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.all
   end
 
   # GET /courses/1
@@ -19,8 +20,8 @@ class CoursesController < ApplicationController
 
   # GET /courses/1/edit
   def edit
-    @users = User.pluck(:full_name, :id)
-    @rooms = Room.pluck(:number, :id)
+    @users = User.order(:last_name).pluck(:full_name, :id)
+    @rooms = Room.order(:building_id).pluck(:number, :id)
   end
 
   # POST /courses
@@ -32,28 +33,24 @@ class CoursesController < ApplicationController
     @course.room_id = 1
     @course.user_id = 1
 
-    respond_to do |format|
-      if @course.save
-        format.html { redirect_to courses_path, notice: 'Course was successfully created.' }
-        format.json { render :show, status: :created, location: courses_path }
-      else
-        format.html { render :new }
-        format.json { render json: @course.errors, status: :unprocessable_entity }
-      end
+    if @course.save
+      flash[:success] = 'Course was successfully added.'
+      redirect_to courses_path
+    else
+      format.html { render :new }
+      format.json { render json: @course.errors, status: :unprocessable_entity }
     end
   end
 
   # PATCH/PUT /courses/1
   # PATCH/PUT /courses/1.json
   def update
-    respond_to do |format|
-      if @course.update(course_params)
-        format.html { redirect_to @course, notice: 'Course was successfully updated.' }
-        format.json { render :show, status: :ok, location: @course }
-      else
-        format.html { render :edit }
-        format.json { render json: @course.errors, status: :unprocessable_entity }
-      end
+    if @course.update(course_params)
+      flash[:success] = 'Course was successfully updated.'
+      redirect_to courses_path
+    else
+      format.html { render :edit }
+      format.json { render json: @course.errors, status: :unprocessable_entity }
     end
   end
 
@@ -61,16 +58,24 @@ class CoursesController < ApplicationController
   # DELETE /courses/1.json
   def destroy
     @course.destroy
-    respond_to do |format|
-      format.html { redirect_to courses_url, notice: 'Course was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:success] = 'Course was successfully deleted.'
+    redirect_to courses_path
+  end
+  
+  def assign_room
+  end
+  
+  def set_course_time
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
       @course = Course.find(params[:id])
+    end
+    
+    def set_courses
+      @courses = Course.all
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

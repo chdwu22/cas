@@ -19,3 +19,5 @@ end
 
 
 User.create!({:first_name => 'super', :last_name => 'admin', :full_name=>'super admin',:is_admin=>true, :email=>'admin@tamu.edu', :password=>"asdf"})
+Building.create!({:name => 'TBD'})
+Room.create!({:number => '1', :capacity=>0, :building_id=>1})

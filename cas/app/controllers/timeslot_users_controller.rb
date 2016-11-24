@@ -39,9 +39,9 @@ class TimeslotUsersController < ApplicationController
           TimeslotUser.create(:user_id=>@user.id, :timeslot_id=>p[0], :preference_type=>p[1])
         end
       end
-      flash[:success] = debug2.to_s #"Preferences have successfully updated."
+      #flash[:success] = "Preferences have successfully updated."
     end
-    #redirect_to user_path(@user)
+    redirect_to user_path(@user)
   end
   
   private
@@ -75,14 +75,14 @@ class TimeslotUsersController < ApplicationController
         @timeslots.each do |ts|
           if(day==ts.day && start_time==ts.from_time && end_time==ts.to_time)
             timeslot_user[ts.id] = params[param].to_i
-            debug1 << start_time
+            debug1 << ts.id << params[param]
             
           end
         end
       end
     end
     debug1 << debug1.count
-    flash[:danger] = debug1.to_s
+    flash[:danger] = timeslot_user.to_s
     return timeslot_user
   end
 end

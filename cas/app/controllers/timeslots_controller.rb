@@ -63,7 +63,7 @@ class TimeslotsController < ApplicationController
   
   def new_time_table
     clear_records
-    @days = Systemvariable.where("name=>", "day")
+    @days = Systemvariable.where("name=?", "day")
     @times = Systemvariable.where("name=?", "time")
     #@days = Systemvariable.where(:name =>"day")
     #@times = Systemvariable.where(:name =>"time")

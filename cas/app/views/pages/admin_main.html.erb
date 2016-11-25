@@ -20,6 +20,7 @@
       <dt>Courses</dt>
       <dd><%= link_to 'Add course', new_course_path %></dd>
       <dd><%= link_to 'Course list', courses_path %></dd>
+      <dd><%= link_to 'View by faculty', assignment_by_faculty_path %></dd>
     </dl>
   </div>
 </div>
@@ -48,7 +49,6 @@
       <dt>Assignments</dt>
       <dd><%= link_to 'Assign course time', set_course_time_path %></dd>
       <dd><%= link_to 'Assign room to courses', assign_room_path %></dd>
-      <dd><%= link_to 'View by faculty', assignment_by_faculty_path %></dd>
       <dd><%= link_to 'View assignments', assignment_table_path %></dd>
     </dl>
   </div>

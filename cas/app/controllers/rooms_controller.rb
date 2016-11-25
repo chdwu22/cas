@@ -17,11 +17,13 @@ class RoomsController < ApplicationController
   def new
     @room = Room.new
     @buildings = Building.pluck(:name, :id)
+    @buildings.delete_at(0)
   end
 
   # GET /rooms/1/edit
   def edit
     @buildings = Building.pluck(:name, :id)
+    @buildings.delete_at(0)
   end
 
   # POST /rooms
@@ -29,7 +31,7 @@ class RoomsController < ApplicationController
   def create
     @room = Room.new(room_params)
     if @room.save
-      flash[:success] = 'Room was successfully created.'
+      flash[:success] = 'Room was successfully added.'
       redirect_to rooms_path
     else
       render :new
@@ -39,14 +41,11 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
-    respond_to do |format|
-      if @room.update(room_params)
-        flash[:success] = 'Room was successfully updated.'
-        redirect_to @room
-      else
-        format.html { render :edit }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
+    if @room.update(room_params)
+      flash[:success] = 'Room was successfully updated.'
+      redirect_to rooms_path
+    else
+      render :edit 
     end
   end
 

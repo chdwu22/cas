@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Building:</strong>
+  <%= @room.building.name %>
+</p>
+
+<p>
   <strong>Number:</strong>
   <%= @room.number %>
 </p>
@@ -10,10 +15,6 @@
   <%= @room.capacity %>
 </p>
 
-<p>
-  <strong>Building:</strong>
-  <%= @room.building_id %>
-</p>
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>

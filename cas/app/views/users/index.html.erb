@@ -20,13 +20,11 @@
             <td><%= user.email %></td>
             <td><%= link_to 'Show', user %></td>
             <td><%= link_to 'Reset password', edit_user_path(user) %></td>
-            <% if current_user.id != user.id %>
+            <% if current_user.id != user.id && user.id != 1 %>
               <td><%= link_to 'Change role', change_role_path(:id => user.id) %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-            <% if user.id != 1 %>
               <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% else %>
+              <td></td><td></td>
             <% end %>
           </tr>
         <% end %>

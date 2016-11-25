@@ -15,7 +15,8 @@ class SystemvariablesController < ApplicationController
   end
   
   def new_day
-    @days = Systemvariable.where(:name =>"day")
+    @days = Systemvariable.where("name=?", "day")
+    #@days = Systemvariable.where(:name =>"day")
   end
   
   def create_day
@@ -37,7 +38,8 @@ class SystemvariablesController < ApplicationController
   end
   
   def new_time
-    @times = Systemvariable.where(:name =>"time")
+    @times = Systemvariable.where("name=?", "time")
+    #@times = Systemvariable.where(:name =>"time")
   end
   
   def create_time
@@ -59,7 +61,7 @@ class SystemvariablesController < ApplicationController
   end
   
   def overlapping?
-    @times = Systemvariable.where(:name =>"time")
+    @times = Systemvariable.where("name=?", "time")
     return false if @times.empty?
     new_from_time = params[:from_time].to_i
     new_to_time = params[:to_time].to_i

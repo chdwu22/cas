@@ -22,7 +22,7 @@
         <tbody>
           <% @times.each do |time| %>
             <tr>
-              <td><%= format_time(time) %><br></td>
+              <td><%= format_time(time.value) %><br></td>
               <td><%= link_to 'Delete', delete_time_path(:id=>time.id), data: { confirm: 'Are you sure?' } %></td>
             </tr>
           <% end %>

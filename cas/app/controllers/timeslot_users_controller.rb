@@ -21,7 +21,8 @@ class TimeslotUsersController < ApplicationController
         flash[:danger] = "You have selected #{preferred_count} preferred time slots. The limit is #{preferred_limit}"
       end
     else
-      @timeslot_current_user = TimeslotUser.where(:user_id=>@user.id)
+      @timeslot_current_user = TimeslotUser.where("user_id=?", @user.id)
+      #@timeslot_current_user = TimeslotUser.where(:user_id=>@user.id)
       if !@timeslot_current_user.empty?
         @timeslot_current_user.each do |tcs|
           @prefs.each do |p|

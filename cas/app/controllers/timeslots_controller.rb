@@ -63,8 +63,10 @@ class TimeslotsController < ApplicationController
   
   def new_time_table
     clear_records
-    @days = Systemvariable.where(:name =>"day")
-    @times = Systemvariable.where(:name =>"time")
+    @days = Systemvariable.where("name=>", "day")
+    @times = Systemvariable.where("name=?", "time")
+    #@days = Systemvariable.where(:name =>"day")
+    #@times = Systemvariable.where(:name =>"time")
     @days.each do |day|
       @times.each do |time|
         ts = time.value.split('-')
@@ -81,8 +83,6 @@ class TimeslotsController < ApplicationController
   def show_time_table
     @days = Timeslot.pluck(:day).uniq
     @times = Timeslot.pluck(:from_time, :to_time).uniq
-    #@days = Systemvariable.where(:name =>"day")
-    #@times = Systemvariable.where(:name =>"time")
   end
 
   private

@@ -22,6 +22,7 @@ class CoursesController < ApplicationController
   def edit
     @users = User.order(:last_name).pluck(:full_name, :id)
     @rooms = Room.order(:building_id).pluck(:number, :id)
+    @buildings = Building.pluck(:name, :id)
   end
 
   # POST /courses

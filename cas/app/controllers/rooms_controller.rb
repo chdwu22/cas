@@ -11,6 +11,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @times = parse_available_time(@room.available_time)
   end
 
   # GET /rooms/new
@@ -65,6 +66,6 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:number, :capacity, :building_id)
+      params.require(:room).permit(:number, :capacity, :building_id, :available_time)
     end
 end

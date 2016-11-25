@@ -15,6 +15,16 @@
   <%= @room.capacity %>
 </p>
 
+<p>
+  <strong>Available time:</strong>
+  <% if @times != nil %>
+    <br><%= @times.count %><br>
+    <% @times.each do |t| %>
+      <%= t %>
+    <% end %>
+  <% end %>
+</p>
+
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>

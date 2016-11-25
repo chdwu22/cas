@@ -2,7 +2,7 @@
 <%= form_for(room) do |f| %>
   <div class="field">
     <%= f.label "building" %>
-    <%= f.select :building_id, options_for_select(@buildings) %>
+    <%= f.select :building_id, options_for_select(@buildings, @room.building_id) %>
   </div>
   
   <div class="field">
@@ -17,10 +17,14 @@
   
   <div class="field">
     <%= f.label "available time" %>
-    <%= f.text_area :available_time, rows: 6%>
+    example: <br>
+    MW-800-1530,<br>
+    T-900-1700,<br>
+    F-1000-1500<br>
+    <%= f.text_area :available_time, rows: 6 %>
   </div>
 
   <div class="actions">
-    <%= f.submit "Add Room"%>
+    <%= f.submit %>
   </div>
 <% end %>

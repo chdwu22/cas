@@ -63,11 +63,6 @@ class CoursesController < ApplicationController
     redirect_to courses_path
   end
   
-  def assign_room
-  end
-  
-  def set_course_time
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

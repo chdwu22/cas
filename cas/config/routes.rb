@@ -39,6 +39,6 @@ Rails.application.routes.draw do
   
   get 'set_preference', to:'timeslot_users#set_preference'
   
-  get 'assign_room', to:'courses#assign_room'
-  get 'set_course_time', to:'courses#set_course_time'
+  #get 'assign_room', to:'courses#assign_room'
+  #get 'set_course_time', to:'courses#set_course_time'
 end

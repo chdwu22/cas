@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
-  helper_method :current_user, :logged_in?, :current_year, :current_semester, :format_time
+  helper_method :current_user, :logged_in?, :current_year, :current_semester, :format_time, :format_day_time
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -42,13 +42,18 @@ class ApplicationController < ActionController::Base
     time_slot = ts.split('-')
     ft = time_slot[0].to_i
     tt = time_slot[1].to_i
-    start_min = (ft%100 ==0)? "00" : (ft%100).to_s
-    end_min = (tt%100 ==0)? "00" : (tt%100).to_s
-    (ft/100).to_s + ":" + start_min + "-" + (tt/100).to_s + ":" + end_min.to_s
+    to_normal_time(ft) + "-" + to_normal_time(tt)
+  end
+  
+  # convert integer mt = 800 to string nt = 8:00
+  def to_normal_time(mt)
+    hour = (mt/100).to_s
+    min = (mt%100 ==0)? "00" : (mt%100).to_s
+    return hour+":"+min
   end
   
   ##############################################################################
-  #parse string "MW-0800-1000, T-900-1500" to an array of datetime
+  #parse string "MW-0800-1000, T-900-1500" to an array of daytime
   def parse_available_time(input_str)
     times = []
     begin
@@ -64,7 +69,8 @@ class ApplicationController < ActionController::Base
         end_time = Integer(cells[2].strip)
         return nil if !legit_time?(start_time, end_time)
         
-        times << days.scan(/\w/) << start_time << end_time
+        t = [days.upcase.scan(/\w/)] << start_time << end_time
+        times << t
       end
     rescue
       flash[:danger] = "Time format not correct."
@@ -97,11 +103,25 @@ class ApplicationController < ActionController::Base
   
   def legit_time?(start_time, end_time)
     if (end_time<=start_time || start_time >2400 || end_time >2400)
-      flash[:danger] = "Check start time and end time format"
+      flash[:danger] = "Check start time or end time format"
       return false
     else
       return true
     end
   end
   ##############################################################################
+  
+  #input is an array of daytime, [[["M","W"], 800, 1300],[["F"],930,1500]]. 
+  #output is an array of string ["MW 8:00-13:00", "F 9:30-15:00"]
+  def format_day_time(day_times)
+    output = []
+    day_times.each do |dt|
+      str = ""
+      dt[0].each { |d| str << d }
+      str << " "
+      str << to_normal_time(dt[1]) << "-" << to_normal_time(dt[2])
+      output << str
+    end
+    return output
+  end
 end

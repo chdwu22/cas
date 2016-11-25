@@ -1,6 +1,7 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy]
   before_action :require_admin
+  before_action :set_buildings, only: [:new, :edit, :create, :update]
 
   # GET /rooms
   # GET /rooms.json
@@ -11,40 +12,63 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
-    @times = parse_available_time(@room.available_time)
+    if (@room.available_time!=nil)
+      if(!@room.available_time.strip.empty?)
+        @times = parse_available_time(@room.available_time)
+      end
+    end
   end
 
   # GET /rooms/new
   def new
     @room = Room.new
-    @buildings = Building.pluck(:name, :id)
-    @buildings.delete_at(0)
   end
 
   # GET /rooms/1/edit
   def edit
-    @buildings = Building.pluck(:name, :id)
-    @buildings.delete_at(0)
   end
 
   # POST /rooms
   # POST /rooms.json
   def create
     @room = Room.new(room_params)
-    if @room.save
-      flash[:success] = 'Room was successfully added.'
-      redirect_to rooms_path
-    else
+    availability = false
+    if (@room.available_time!=nil)
+      if(!@room.available_time.strip.empty?)
+        availability = true
+        @times = parse_available_time(@room.available_time)
+      end
+    end
+    
+    if(availability==true && @times==nil)
       render :new
+      return
+    else
+      if @room.save
+        flash[:success] = 'Room was successfully added.'
+        redirect_to rooms_path
+      else
+        render :new
+      end
     end
   end
 
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
-    if @room.update(room_params)
-      flash[:success] = 'Room was successfully updated.'
-      redirect_to rooms_path
+    if (room_params[:available_time]!=nil)
+      if(!room_params[:available_time].strip.empty?)
+        @times = parse_available_time(room_params[:available_time])
+      end
+    end
+    
+    if(@times!=nil)
+      if @room.update(room_params)
+        flash[:success] = 'Room was successfully updated.'
+        redirect_to rooms_path
+      else
+        render :edit 
+      end
     else
       render :edit 
     end
@@ -55,7 +79,7 @@ class RoomsController < ApplicationController
   def destroy
     @room.destroy
     flash[:success] = 'Room was successfully deleted.'
-    rooms_url
+    redirect_to rooms_url
   end
 
   private
@@ -67,5 +91,10 @@ class RoomsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
       params.require(:room).permit(:number, :capacity, :building_id, :available_time)
+    end
+    
+    def set_buildings
+      @buildings = Building.pluck(:name, :id)
+      @buildings.delete_at(0)
     end
 end

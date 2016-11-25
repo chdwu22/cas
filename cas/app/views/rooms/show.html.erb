@@ -18,10 +18,8 @@
 <p>
   <strong>Available time:</strong>
   <% if @times != nil %>
-    <br><%= @times.count %><br>
-    <% @times.each do |t| %>
-      <%= t %>
-    <% end %>
+    <% dts = format_day_time(@times) %>
+    <%= dts.each { |dt| "#{dt} | " }%>
   <% end %>
 </p>
 

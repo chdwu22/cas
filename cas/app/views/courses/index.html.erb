@@ -12,7 +12,6 @@
           <th>Name</th>
           <th>Size</th>
           <th>Time</th>
-          <th>Year</th>
           <th>Semester</th>
           <th>Room</th>
           <th>Faculty</th>
@@ -28,8 +27,7 @@
             <td><%= course.name %></td>
             <td><%= course.size %></td>
             <td><%= course.time %></td>
-            <td><%= course.year %></td>
-            <td><%= course.semester %></td>
+            <td><%= course.year %> <%= course.semester %></td>
             <td><% if course.room.id!=1 %><%= course.room.building.name%> <%= course.room.number %><% end %></td>
             <td><%= course.user.full_name if course.user.id !=1%></td>
             <td><%= link_to 'Show', course %></td>

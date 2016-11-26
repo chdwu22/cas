@@ -1,6 +1,80 @@
 <h1>Editing Course</h1>
 
-<%= render 'form', course: @course %>
-
 <%= link_to 'Show', @course %> |
 <%= link_to 'Back', courses_path %>
+
+<table>
+  <tr>
+    <td valign="top">
+      <h4><%= @course.number %>-<%= @course.section %> <%= @course.name %></h4>
+      <%= render 'form', course: @course %>
+      <br><br>
+      <div>
+        <h4><%= @course.user.full_name %> preference</h4>
+      </div>
+      <div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="120px"> </th>
+              <% @days.each do |day| %>
+                <th  width="100px"> <%= day.value %> </th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @timeslot_current_user.empty? %>
+              <h4>Preference not set</h4>
+            <% else %>
+              <% row_index = 0 %>
+              <% @times.each do |time| %>
+                <tr>
+                  <td><%= format_time(time.value) %><br></td>
+                  <% pref_current_row =  pref_current_row = @preferences[row_index] %>
+                  <% row_index = row_index + 1 %>
+                  <% col_index = 0 %>
+                  <% @days.each do |day| %>
+                    <% if pref_current_row[col_index] ==1 %> <td bgcolor="#CCFFCC"> <% end %> <% if pref_current_row[col_index] ==2 %> <td> <% end %> <% if pref_current_row[col_index] ==3 %> <td bgcolor="#FFCCCC"> <% end %>
+                    <% if pref_current_row[col_index] ==1 %> P <% end %> <% if pref_current_row[col_index] ==2 %> A <% end %> <% if pref_current_row[col_index] ==3 %> U <% end %></td>
+                    <% col_index = col_index + 1 %>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+    </td>
+    <td width="100"></td>
+    <td valign="top">
+      <h4>Room Availability</h4>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Building</th>
+            <th>Number</th>
+            <th>Capacity</th>
+            <th>Available time</th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @rooms.each do |room| %>
+            <% if room.capacity >= @course.size %>
+              <tr>
+                <td><%= room.id %></td>
+                <td><%= room.building.name %></td>
+                <td><%= room.number %></td>
+                <td><%= room.capacity %></td>
+                <td><%= room.available_time %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      
+    </td>
+  </tr>
+</table>

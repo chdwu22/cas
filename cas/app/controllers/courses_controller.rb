@@ -49,6 +49,7 @@ class CoursesController < ApplicationController
   # PATCH/PUT /courses/1.json
   def update
     
+    #check if user entered time is legit format
     if (course_params[:time]!=nil)
       if(!course_params[:time].strip.empty?)
         @timelines = parse_available_time(course_params[:time])
@@ -56,11 +57,17 @@ class CoursesController < ApplicationController
     end
     
     if(@timelines!=nil)
-      if @course.update(course_params)
-        flash[:success] = 'Course was successfully updated.'
-        redirect_to courses_path
+      radct = room_available_during_course_time?
+      if(radct)
+        if @course.update(course_params)
+          flash[:success] = 'Course was successfully updated.'
+          redirect_to courses_path
+        else
+          render :edit 
+        end
       else
-        render :edit 
+        flash[:danger] = "#{@room.building.name} #{@room.number} is not available during this class time"
+        render :edit
       end
     else
       render :edit 
@@ -99,6 +106,36 @@ class CoursesController < ApplicationController
     def course_params
       params.require(:course).permit(:number, :section, :name, :size, :day, :time, :year, :semester, :room_id, :user_id)
     end
+    
+    def room_available_during_course_time?
+      course_time = parse_available_time(course_params[:time])
+      @room = Room.find(course_params[:room_id])
+      
+      if @room.id==1
+        return true
+      end
+      if @room.available_time==nil
+        flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+        return false
+      else
+        if @room.available_time.empty?
+          flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+          return false
+        end
+      end
+      room_available_time = parse_available_time(@room.available_time)
+      course_time.each do |ct|
+        r = false
+        room_available_time.each do |rat|
+          if include_time?(rat, ct)
+            r = true
+          end
+        end
+        return r
+      end
+    end
+    
+    
     
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)

@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
   
   ##############################################################################
-  #parse string "MW-0800-1000, T-900-1500" to an array of daytime
+  #parse string "MW-800-1000, T-900-1500" to an array of daytime
   def parse_available_time(input_str)
     times = []
     begin
@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
   end
   
   def legit_time?(start_time, end_time)
-    if (end_time<=start_time || start_time >2400 || end_time >2400)
+    if (end_time<=start_time || start_time >2400 || end_time >2400 || start_time%100>59 || end_time%100>59)
       flash[:danger] = "Check start time or end time format"
       return false
     else
@@ -124,4 +124,70 @@ class ApplicationController < ActionController::Base
     end
     return output
   end
+  
+  def remaining_time()
+  end
+  
+  #convert [["T","R"],800,900] to 1920, 1980, 4800, 4860. T800 = (1*24+8)*60+0. 1 day 8 hours and 0 minute.
+  def to_int_time(arr)
+    result = []
+    days = arr[0]
+    days.each do |day|
+      d = day_to_int(day)
+      start_hour = Integer(arr[1])/100
+      start_min = Integer(arr[1])%100
+      end_hour = Integer(arr[2])/100
+      end_min = Integer(arr[2])%100
+      r1 = (d*24+start_hour)*60 + start_min
+      r2 = (d*24 + end_hour)*60 + end_min
+      result << r1 << r2
+    end
+    return result
+  end
+  
+  def day_to_int(d)
+    case d
+    when "M", "m"
+      return 0
+    when "T", "t"
+      return 1
+    when "W", "w"
+      return 2
+    when "R", "r"
+      return 3
+    when "F", "f"
+      return 4
+    else
+      return -1
+    end
+  end
+  
+  #return true if time2 is included in time1. [["T","R"],800,1000] includes [["T"],800,900]
+  def include_time?(time1, time2)
+    t1 = to_int_time(time1)
+    t2 = to_int_time(time2)
+    
+    i=0
+    while i < t2.count/2  do
+      short_st = t2[i]
+      short_et = t2[i+1]
+      j=0
+      while j < t1.count/2  do
+        long_st = t1[j]
+        long_et = t1[j+1]
+        if(short_st < long_st || short_et > long_et)
+          return false
+        end
+        j +=2
+      end
+      i +=2
+    end
+    return true
+  end
+  
+  
+  
+  
+  
+  
 end

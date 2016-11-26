@@ -68,7 +68,7 @@
                 <td><%= room.building.name %></td>
                 <td><%= room.number %></td>
                 <td><%= room.capacity %></td>
-                <td><%= room.available_time %></td>
+                <td><%= room_availability(room)%></td>
               </tr>
             <% end %>
           <% end %>

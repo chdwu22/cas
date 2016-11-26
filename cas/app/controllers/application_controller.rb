@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
   
   ##############################################################################
-  #parse string "MW-800-1000, T-900-1500" to an array of daytime
+  #parse string "MW-800-1000, T-900-1500" to an array of daytime [[["M","W"],800,1000],["T"],900,1500]
   def parse_available_time(input_str)
     times = []
     begin
@@ -162,6 +162,23 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def int_to_day(d)
+    case d
+    when 0
+      return "M"
+    when 1
+      return "T"
+    when 2
+      return "W"
+    when 3
+      return "R"
+    when 4
+      return "F"
+    else
+      return ""
+    end
+  end
+  
   #return true if time2 is included in time1. [["T","R"],800,1000] includes [["T"],800,900]
   def include_time?(time1, time2)
     t1 = to_int_time(time1)
@@ -184,6 +201,134 @@ class ApplicationController < ActionController::Base
     end
     return true
   end
+  
+  ##############################################################################
+  #many to many
+  #[[["M","T"], 800, 900], [["W"], 800, 1000]] - [[["M"], 830, 900], [["W"], 800, 900]] = 
+  #[[["M"], 800, 830], [["W"], 900, 1000],[["T"],800,900]]
+  def subtract_time_group(times1, times2)
+    times2.each do |ts2|
+      times1 = subtract_time_group_helper(times1, ts2)
+    end
+    return times1
+    return to_array_time(result.flatten)
+  end
+  #many to one
+  def subtract_time_group_helper(times1, time2)
+    result=[]
+    times1.each do |ts1|
+      if include_time?(ts1, time2)
+        result << subtract_time(ts1,time2)
+      else
+        result << to_int_time(ts1)
+      end
+    end
+    return to_array_time(result.flatten)
+  end
+  
+  #one to one
+  #subtract time2 from time1. [["T","R"],800,1000] subtract [["T"],800,900]
+  #[1980,2040,4800,4920] which is T-9:00-10:00 and R-8:00-10:00
+  #any timeframe that is smaller than 1 hours is ignored because you cannot 
+  #schedule any class lass than one hour
+  def subtract_time(time1, time2)
+    t1 = to_int_time(time1).sort
+    t2 = to_int_time(time2).sort
+    
+    i=0
+    result = t1
+    while i < t2.count  do
+      short_st = t2[i]
+      short_et = t2[i+1]
+      result = helper_subtract(result, [short_st, short_et])
+      i +=2
+    end
+    return result
+  end
+  
+  #subtract time2 from time1
+  def helper_subtract(time1, time2)
+    result = []
+    threshold = 60 #minutes
+    i=0
+    while i < time1.count  do
+      long_st = time1[i]
+      long_et = time1[i+1]
+      if(time2[0] >= long_st && time2[1] <= long_et)
+        if(time2[0]-long_st >= threshold)
+          result << long_st << time2[0]
+        end
+        if( long_et-time2[1] >= threshold)
+          result << time2[1] << long_et
+        end
+      else
+        result << long_st << long_et
+      end
+      i += 2
+    end
+    return result
+  end
+  
+  #convert [1920,1980,2040,2100,4800,4860,4920,4980] to [[["T","R"],800,900],[["T","R"],1000,1100]]
+  def to_array_time(arr)
+    i=0
+    result = []
+    while i < arr.count  do
+      result << array_time_helper(arr[i], arr[i+1])
+      i +=2
+    end
+    if result.count > 1
+      result = group(result)
+    end
+    return result
+  end
+  
+  #convert 1920,1980 to [["T"],800,900]
+  def array_time_helper(st, et)
+    st_min = st%60
+    st_hour = st/60
+    et_min = et%60
+    et_hour = et/60
+    day = st_hour/24
+    d = int_to_day(day)
+    return [[d],st_hour%24*100+st_min, et_hour%24*100+et_min]
+    
+  end
+  
+  #group timeframe with same day. 
+  #convert [[["T"],800,900],[["T"],1000,1100],[["R"],800,900],[["R"],1000,1100]] to
+  #[[["T","R"],800,900],[["T","R"],1000,1100]]
+  def group(input)
+    i=0
+    while i < input.count  do
+      if input[i][0] != 0
+        j=i+1
+        while j < input.count  do
+          if input[j][0] != 0
+            if(input[j][1]==input[i][1] && input[j][2]==input[i][2])
+              input[i][0] << input[j][0][0]
+              input[j][0]=0
+            end
+          end
+          j +=1
+        end
+      end
+      i +=1
+    end
+    
+    result = []
+    k=0
+    while k<input.count do
+      if input[k][0] !=0
+        result << input[k]
+      end
+      k += 1
+    end
+    return result
+  end
+  ##############################################################################
+  
+  
   
   
   

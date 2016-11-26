@@ -3,6 +3,8 @@ class CoursesController < ApplicationController
   before_action :require_admin
   before_action :set_courses, only: [:index, :assign_room, :set_course_time]
   before_action :render_edit, only: [:edit, :update]
+  
+  helper_method :room_availability
 
   # GET /courses
   # GET /courses.json
@@ -123,11 +125,12 @@ class CoursesController < ApplicationController
           return false
         end
       end
-      room_available_time = parse_available_time(@room.available_time)
+      #room_available_time = parse_available_time(@room.available_time)
+      room_available_time = room_availability(@room)
       course_time.each do |ct|
         r = false
-        room_available_time.each do |rat|
-          if include_time?(rat, ct)
+        room_available_time.each do |t|
+          if include_time?(t, ct)
             r = true
           end
         end
@@ -135,6 +138,27 @@ class CoursesController < ApplicationController
       end
     end
     
+    def room_availability(room)
+      if (room.available_time==nil || room.id==1)
+        return nil
+      end
+      if room.available_time.empty?
+        return nil
+      end
+      ra = parse_available_time(room.available_time)
+      @courses = set_courses
+      @courses.each do |course|
+        ct = course.time
+        if(course.room_id==room.id)
+          if ct!=nil
+            if !ct.empty?
+              ra = subtract_time_group(ra,parse_available_time(ct))
+            end
+          end
+        end
+      end
+      return ra
+    end
     
     
     def render_edit

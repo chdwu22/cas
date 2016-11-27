@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   
   get 'new_time_table', to:'timeslots#new_time_table'
   get 'time_table', to:'timeslots#show_time_table'
+  get 'anm_table', to:'timeslots#anm_table'
   
   get 'set_preference', to:'timeslot_users#set_preference'
   

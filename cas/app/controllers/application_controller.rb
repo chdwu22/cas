@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     Systemvariable.find_by(:name=>"scheduling_semester").value
   end
   
-  #format string 800 to 8:00
+  #format string 1320-1420 to 1:20-2:20
   def format_time(ts)
     time_slot = ts.split('-')
     ft = time_slot[0].to_i
@@ -47,9 +47,10 @@ class ApplicationController < ActionController::Base
   
   # convert integer mt = 800 to string nt = 8:00
   def to_normal_time(mt)
-    hour = (mt/100).to_s
+    hour = (mt/100)
+    hour = (hour>12)? hour-12 : hour
     min = (mt%100 ==0)? "00" : (mt%100).to_s
-    return hour+":"+min
+    return hour.to_s+":"+min
   end
   
   ##############################################################################

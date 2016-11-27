@@ -5,54 +5,152 @@
 
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>
-  <div class="well col-xs-8 col-xs-offset-1">
+  <div class="col-xs-7 col-xs-offset-1">
     <h5><b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable</h5>
     <h5>Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b></h5>
     <h5>Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b></h5>
-    <table class="table table-bordered">
-      <thead>
+    <table class="table table-striped">
+      <% if @user_pref.empty? %>
         <tr>
-          <th width="120px"> </th>
-          <% @days.each do |day| %>
-            <th  width="100px"> <%= day.value %> </th>
+          <td></td>
+          <% @MWF.each do |mwf| %>
+            <td><%= format_time(mwf.from_time.to_s+"-"+mwf.to_time.to_s) %></td>
+          <% end %>
+          <% @MW.each do |mw| %>
+            <td><%= format_time(mw.from_time.to_s+"-"+mw.to_time.to_s) %></td>
           <% end %>
         </tr>
-      </thead>
-      <tbody>
-        <% if @timeslot_current_user.empty? %>
-          <% @times.each do |time| %>
-            <tr>
-              <td><%= format_time(time.value) %><br></td>
-              <% @days.each do |day| %>
-                <% if @faculty_permission.value=="yes" %>
-                  <td><%= select_tag("prf-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
-                <% else %>
-                  <td>A</td>
-                <% end %>
-              <% end %>
-            </tr>
+        <tr>
+          <td>MWF</td>
+          <% @MWF.each do |mwf| %>
+            <% if @faculty_permission.value=="yes" %>
+              <td><%= select_tag("prf-MWF-#{mwf.from_time}-#{mwf.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
+            <% else %>
+              <td>A</td>
+            <% end %>
           <% end %>
-        <% else %>
-          <% row_index = 0 %>
-          <% @times.each do |time| %>
-            <tr>
-              <td><%= format_time(time.value) %><br></td>
-              <% pref_current_row =  pref_current_row = @preferences[row_index] %>
-              <% row_index = row_index + 1 %>
-              <% col_index = 0 %>
-              <% @days.each do |day| %>
-                <% if pref_current_row[col_index] ==1 %> <td bgcolor="#CCFFCC"> <% end %> <% if pref_current_row[col_index] ==2 %> <td> <% end %> <% if pref_current_row[col_index] ==3 %> <td bgcolor="#FFCCCC"> <% end %>
-                <% if @faculty_permission.value=="yes" %>
-                  <%= select_tag("prf-#{day.value}-#{time.value}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], pref_current_row[col_index])) %> </td>
-                <% else %>
-                  <% if pref_current_row[col_index] ==1 %> P <% end %> <% if pref_current_row[col_index] ==2 %> A <% end %> <% if pref_current_row[col_index] ==3 %> U <% end %></td>
-                <% end %>
-                <% col_index = col_index + 1 %>
-              <% end %>
-            </tr>
+          <% @MW.each do%>
+            <td></td>
           <% end %>
-        <% end %>
-      </tbody>
+        </tr>
+        <tr>
+          <td>MW</td>
+          <% @MWF.each do%>
+            <td></td>
+          <% end %>
+          <% @MW.each do |mw| %>
+            <% if @faculty_permission.value=="yes" %>
+              <% if mw.from_time > 1700 %>
+                <td bgcolor="#FFCCCC"><%= select_tag("prf-MW-#{mw.from_time}-#{mw.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 3)) %> </td>
+              <%else%>
+                <td><%= select_tag("prf-MW-#{mw.from_time}-#{mw.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
+              <% end %>
+            <% else %>
+              <% if mw.from_time > 1700 %>
+                <td bgcolor="#FFCCCC"> U </td>
+              <%else%>
+                <td>A</td>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tr>
+        <tr>
+          <td height="50"></td>
+        </tr>
+        <tr>
+          <td>
+          <% @TR.each do |tr| %>
+            <td><%= format_time(tr.from_time.to_s+"-"+tr.to_time.to_s) %></td>
+          <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>TR</td>
+          <% @TR.each do |tr| %>
+            <% if @faculty_permission.value=="yes" %>
+              <% if tr.from_time > 1700 %>
+                <td bgcolor="#FFCCCC"><%= select_tag("prf-TR-#{tr.from_time}-#{tr.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 3)) %> </td>
+              <% else %>
+                <td><%= select_tag("prf-TR-#{tr.from_time}-#{tr.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], 2)) %> </td>
+              <% end %>
+            <% else %>
+              <% if tr.from_time > 1700 %>
+                <td bgcolor="#FFCCCC"> U </td>
+              <%else%>
+                <td>A</td>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tr>
+      <% else %>
+      
+      
+      
+        <tr>
+          <td></td>
+          <% @MWF.each do |mwf| %>
+            <td><%= format_time(mwf.from_time.to_s+"-"+mwf.to_time.to_s) %></td>
+          <% end %>
+          <% @MW.each do |mw| %>
+            <td><%= format_time(mw.from_time.to_s+"-"+mw.to_time.to_s) %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>MWF</td>
+          <% @MWF.each do |mwf| %>
+            <% if @faculty_permission.value=="yes" %>
+              <% option = get_option(mwf) %>
+              <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+              <%= select_tag("prf-MWF-#{mwf.from_time}-#{mwf.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
+            <% else %>
+              <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+              option[1]</td>
+            <% end %>
+          <% end %>
+          <% @MW.each do%>
+            <td></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>MW</td>
+          <% @MWF.each do%>
+            <td></td>
+          <% end %>
+          <% @MW.each do |mw| %>
+            <% if @faculty_permission.value=="yes" %>
+              <% option = get_option(mw) %>
+              <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+              <%= select_tag("prf-MW-#{mw.from_time}-#{mw.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
+            <% else %>
+              <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+              option[1] </td>
+            <% end %>
+          <% end %>
+        </tr>
+        <tr>
+          <td height="50"></td>
+        </tr>
+        <tr>
+          <td>
+          <% @TR.each do |tr| %>
+            <td><%= format_time(tr.from_time.to_s+"-"+tr.to_time.to_s) %></td>
+          <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>TR</td>
+          <% @TR.each do |tr| %>
+            <% if @faculty_permission.value=="yes" %>
+              <% option = get_option(tr) %>
+                <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+                <%= select_tag("prf-TR-#{tr.from_time}-#{tr.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
+            <% else %>
+              <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+              option[1] </td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
     </table>
     <% if @faculty_permission.value=="yes" %>
       <%= submit_tag("Update preferences", class: 'btn btn-default' )%>

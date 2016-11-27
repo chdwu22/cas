@@ -37,8 +37,8 @@
   </div>
   
   <div class="field">
-    <%= f.label :time %>
-    <%= f.text_area :time, row: 8 %>
+    <%= f.label :time%>
+    <%= f.select :time, options_for_select(@timeslots, :include_blank => true) %>
   </div>
   
   <div class="field">

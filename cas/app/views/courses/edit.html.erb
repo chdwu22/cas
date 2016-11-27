@@ -15,9 +15,11 @@
       <table>
         <tr>
           <td>
-            <div>
-              <h4><%= @course.user.full_name %> preference</h4>
-            </div>
+            <h4><%= @course.user.full_name %> preference
+            <% if @user_pref.empty? %> 
+              NOT set
+            <% end %>
+            </h4>
             <div>
               <table class="table table-hover">
                 <tr>

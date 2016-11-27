@@ -160,18 +160,23 @@ class CoursesController < ApplicationController
       return ra
     end
     
-    
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)
       @rooms = Room.order(:building_id, :number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:id)
       @buildings = Building.pluck(:name, :id)
+      timeslots = Timeslot.all
       @MWF= Timeslot.where("day=?","MWF").order(:from_time)
       @MW= Timeslot.where("day=?","MW").order(:from_time)
       @TR= Timeslot.where("day=?","TR").order(:from_time)
       @days = Systemvariable.where("name=?","day")
       @times = Systemvariable.where("name=?", "time")
       @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
+      @timeslots = []
+      timeslots.each do |ts|
+        str = ts.day + "-" + ts.from_time.to_s + "-" + ts.to_time.to_s
+        @timeslots << str
+      end
     end
     
     def get_option(mw)

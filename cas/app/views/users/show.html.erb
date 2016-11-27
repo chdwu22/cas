@@ -3,6 +3,15 @@
   <%= link_to 'Edit profile', edit_user_path(@user), class: 'btn btn-default btn-sm'%>
 </div><br><br>
 
+<div align="center">
+  <h4>Assigned courses:</h4>
+  <% if !@courses_info.empty? %>
+    <% @courses_info.each do |c| %>
+      <%= c %> <br>
+    <% end %>
+  <% end %>
+</div><br><br>
+
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>
   <div class="col-xs-7 col-xs-offset-1">

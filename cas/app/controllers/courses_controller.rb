@@ -4,7 +4,7 @@ class CoursesController < ApplicationController
   before_action :set_courses, only: [:index, :assign_room, :set_course_time]
   before_action :render_edit, only: [:edit, :update]
   
-  helper_method :room_availability
+  helper_method :room_availability, :get_option
 
   # GET /courses
   # GET /courses.json
@@ -166,41 +166,28 @@ class CoursesController < ApplicationController
       @rooms = Room.order(:building_id, :number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:id)
       @buildings = Building.pluck(:name, :id)
-      #@fac_preferred = TimeslotUser.where(:user_id=>@course.user_id, :preference_type=>1).includes(:timeslot)
-      #@fac_unaccep = TimeslotUser.where(:user_id=>@course.user_id, :preference_type=>3).includes(:timeslot)
-      
-      #####################################################
-      #faculty prference display
+      @MWF= Timeslot.where("day=?","MWF").order(:from_time)
+      @MW= Timeslot.where("day=?","MW").order(:from_time)
+      @TR= Timeslot.where("day=?","TR").order(:from_time)
       @days = Systemvariable.where("name=?","day")
       @times = Systemvariable.where("name=?", "time")
-      @timeslot_current_user = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
-      if !@timeslot_current_user.empty?
-        count=0
-        order_matched_hash = {}
-        @times.each do |t|
-          ft = t.value.split('-')[0].to_i
-          tt = t.value.split('-')[1].to_i
-          @days.each do |d|
-            @timeslot_current_user.each do |tcu|
-              if(d.value == tcu.timeslot.day && ft==tcu.timeslot.from_time && tt == tcu.timeslot.to_time)
-                order_matched_hash[count] = tcu.preference_type
-                count += 1
-              end
-            end
+      @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
+    end
+    
+    def get_option(mw)
+      @user_pref.each do |up|
+        if (up.timeslot.day == mw.day && up.timeslot.from_time == mw.from_time)
+          option = "A"
+          if(up.preference_type==1)
+            option = "P"
+          elsif (up.preference_type==3)
+            option = "U"
           end
-        end
-        
-        index = 0
-        @preferences = []
-        @times.each do |t|
-          row = []
-          @days.each do |d|
-            row << order_matched_hash[index]
-            index += 1
-          end
-          @preferences << row
+          return [up.preference_type,option]
         end
       end
-      ########################################################
     end
+  
+  
+  
 end

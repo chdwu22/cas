@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :courses
   resources :rooms
   resources :buildings
-  root to: 'pages#root'
+  root to: 'pages#rootpage'
   
   get 'admin_main', to: 'pages#admin_main'
   get 'assignment_table', to:'pages#assignment_table'

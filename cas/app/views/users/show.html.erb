@@ -98,13 +98,13 @@
         <tr>
           <td>MWF</td>
           <% @MWF.each do |mwf| %>
+            <% option = get_option(mwf) %>
             <% if @faculty_permission.value=="yes" %>
-              <% option = get_option(mwf) %>
               <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <%= select_tag("prf-MWF-#{mwf.from_time}-#{mwf.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
             <% else %>
               <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-              option[1]</td>
+              <%= option[1] %></td>
             <% end %>
           <% end %>
           <% @MW.each do%>
@@ -117,13 +117,13 @@
             <td></td>
           <% end %>
           <% @MW.each do |mw| %>
+            <% option = get_option(mw) %>
             <% if @faculty_permission.value=="yes" %>
-              <% option = get_option(mw) %>
               <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <%= select_tag("prf-MW-#{mw.from_time}-#{mw.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
             <% else %>
               <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-              option[1] </td>
+             <%= option[1] %></td>
             <% end %>
           <% end %>
         </tr>
@@ -140,13 +140,13 @@
         <tr>
           <td>TR</td>
           <% @TR.each do |tr| %>
+            <% option = get_option(tr) %>
             <% if @faculty_permission.value=="yes" %>
-              <% option = get_option(tr) %>
                 <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
                 <%= select_tag("prf-TR-#{tr.from_time}-#{tr.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %> </td>
             <% else %>
               <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-              option[1] </td>
+              <%= option[1] %></td>
             <% end %>
           <% end %>
         </tr>

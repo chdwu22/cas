@@ -21,7 +21,10 @@
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
                 <%= course.number %> 
-                <%= course.user.full_name %>
+                <% if course.user_id!=1 %>
+                  <%= course.user.full_name %>
+                <% end %>
+                <br>size: <%= course.size %>
               <% end %>
               </td>
             <% end %>
@@ -37,7 +40,10 @@
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
                 <%= course.number %> 
-                <%= course.user.full_name %>
+                <% if course.user_id!=1 %>
+                  <%= course.user.full_name %>
+                <% end %>
+                <br> size:<%= course.size %>
               <% end %>
               </td>
             <% end %>
@@ -53,7 +59,10 @@
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
                 <%= course.number %> 
-                <%= course.user.full_name %>
+                <% if course.user_id!=1 %>
+                  <%= course.user.full_name %>
+                <% end %>
+                <br> size:<%= course.size %>
               <% end %>
               </td>
             <% end %>

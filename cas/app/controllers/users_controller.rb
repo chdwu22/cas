@@ -124,6 +124,13 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    @courses = Course.all
+    @courses.each do |course|
+      if(course.user_id = @user.id)
+        course.user_id = 1
+        course.save
+      end
+    end
     @user.destroy
     flash[:danger] = 'User was successfully deleted.'
     redirect_to users_url

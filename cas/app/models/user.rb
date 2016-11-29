@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_many :courses
-  has_many :timeslot_users
+  has_many :timeslot_users, dependent: :destroy
   has_many :timeslots, through: :timeslot_users
   
   before_save { self.email = email.downcase}

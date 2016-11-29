@@ -77,6 +77,13 @@ class RoomsController < ApplicationController
   # DELETE /rooms/1
   # DELETE /rooms/1.json
   def destroy
+    @courses = Course.all
+    @courses.each do |course|
+      if(course.room_id == @room.id)
+        course.room_id =1
+        course.save
+      end
+    end
     @room.destroy
     flash[:success] = 'Room was successfully deleted.'
     redirect_to rooms_url

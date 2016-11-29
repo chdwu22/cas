@@ -101,7 +101,8 @@ class CoursesController < ApplicationController
     end
     
     def set_courses
-      @courses = Course.all
+      @courses = Course.where(year:current_year, semester: current_semester )
+      #@courses = Course.where(:conditions=>["year=? and semester=?", current_year, current_semester])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -10,16 +10,20 @@
       </thead>
     
       <tbody>
-        <% @users.each do |user| %>
-          <tr>
-            <td><%= user.first_name %></td>
-            <td><%= user.last_name %></td>
-            <td>
-              <% user.courses.each do |course| %>
-                <%= course.number %> | 
-              <% end %>
-            </td>
-          </tr>
+        <% if !@users.empty? %>
+          <% @users.each do |user| %>
+            <% if user.id!=1 %>
+              <tr>
+                <td><%= user.first_name %></td>
+                <td><%= user.last_name %></td>
+                <td>
+                  <% user.courses.each do |course| %>
+                    <%= course.number %> | 
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
         <% end %>
       </tbody>
     </table>

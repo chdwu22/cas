@@ -1,0 +1,61 @@
+<h4>Courses for current semester</h4>
+
+<div class='row'>
+  <div class="col-xs-9">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Semester</th>
+          <th>Size</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <% if !@current_courses.empty? %>
+          <% @current_courses.each do |course| %>
+            <tr>
+              <td><%= course.number %></td>
+              <td><%= course.name %></td>
+              <td><%= course.year %> <%= course.semester %></td>
+              <td><%= course.size %></td>
+              <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<br><br><br><br>
+<h4>Course repository</h4>
+
+<div class='row'>
+  <div class="col-xs-9">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Add</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <% if !@course_repo.empty? %>
+          <% @course_repo.each do |course| %>
+            <tr>
+              <td><%= course.number %></td>
+              <td><%= course.name %></td>
+              <td><%= link_to 'Add', add_to_current_courses_path(:id=>course.id) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

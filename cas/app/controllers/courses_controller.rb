@@ -24,6 +24,7 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @course_repo = Course.where("year=?",0).order(:number)
   end
 
   # GET /courses/1/edit
@@ -34,14 +35,13 @@ class CoursesController < ApplicationController
   # POST /courses.json
   def create
     @course = Course.new(course_params)
-    @course.year = current_year.to_i
-    @course.semester = current_semester
+    @course.year = 0
     @course.room_id = 1
     @course.user_id = 1
 
     if @course.save
       flash[:success] = 'Course was successfully added.'
-      redirect_to courses_path
+      redirect_to new_course_path
     else
       render :new
     end
@@ -88,10 +88,39 @@ class CoursesController < ApplicationController
   def destroy
     @course.destroy
     flash[:success] = 'Course was successfully deleted.'
-    redirect_to courses_path
+    redirect_to :back
   end
   
-  def copy_courses
+  def delete_course_repo
+    @course = Course.find(params[:id])
+    @course.destroy
+    flash[:success] = 'Course was successfully deleted.'
+    redirect_to new_course_path
+  end
+  
+  def get_course_repo
+    @course_repo = Course.where("year=?",0).order(:number)
+    @current_courses = set_courses
+  end
+  
+  def add_to_current_courses
+    @origin_course = Course.find(params[:id])
+    
+    @course = Course.new
+    @course.number = @origin_course.number
+    @course.name = @origin_course.name
+    @course.size = 0
+    @course.year = Systemvariable.find_by(:name=> "scheduling_year").value.to_i
+    @course.semester = Systemvariable.find_by(:name=> "scheduling_semester").value
+    @course.room_id = 1
+    @course.user_id = 1
+
+    if @course.save
+      flash[:success] = 'Course was successfully added.'
+      redirect_to get_course_repo_path
+    else
+      render :get_course_repo
+    end
   end
 
   private
@@ -101,7 +130,7 @@ class CoursesController < ApplicationController
     end
     
     def set_courses
-      @courses = Course.where(year:current_year, semester: current_semester )
+      @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       #@courses = Course.where(:conditions=>["year=? and semester=?", current_year, current_semester])
     end
 

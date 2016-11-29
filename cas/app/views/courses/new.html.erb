@@ -1,4 +1,4 @@
-<h1>New Course</h1>
+<h3>Add New Course to Course Repository</h3>
 
 <%= form_for(@course) do |f| %>
   <% if @course.errors.any? %>
@@ -18,19 +18,10 @@
     <%= f.text_field :number %>
   </div>
 
-  <div class="field">
-    <%= f.label :section %>
-    <%= f.text_field :section %>
-  </div>
 
   <div class="field">
     <%= f.label "Name *" %>
     <%= f.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= f.label "Size *" %>
-    <%= f.number_field :size %>
   </div>
   
   <div class="actions">
@@ -39,3 +30,32 @@
 <% end %>
 
 <%= link_to 'Back', courses_path %>
+
+<br><br><br><br>
+<h4>Current course repository</h4>
+
+<div class='row'>
+  <div class="col-xs-9">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <% if !@course_repo.empty? %>
+          <% @course_repo.each do |course| %>
+            <tr>
+              <td><%= course.number %></td>
+              <td><%= course.name %></td>
+              <td><%= link_to 'Delete', delete_course_repo_path(:id=>course.id), data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

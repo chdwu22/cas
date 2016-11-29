@@ -18,11 +18,11 @@
   <div class="col-sm-2">
     <dl>
       <dt>Courses</dt>
-      <dd><%= link_to 'Add course', new_course_path %></dd>
+      <dd><%= link_to 'Add course', get_course_repo_path %></dd>
       <dd><%= link_to 'Schedule/edit courses', courses_path %></dd>
       <dd><%= link_to 'View by faculty', assignment_by_faculty_path %></dd>
       <dd><%= link_to 'View assignments', assignment_table_path %></dd>
-      <dd><%= link_to 'Copy courses', copy_courses_path %></dd>
+      <dd><%= link_to 'Course repository',  new_course_path%></dd>
     </dl>
   </div>
 

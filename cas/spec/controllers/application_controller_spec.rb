@@ -90,6 +90,16 @@ describe ApplicationController do
       expect(subject.subtract_time_group([[["M","W","F"], 800, 900], [["T","R"], 900, 1200]],[[["M","W","F"], 800, 850]])).to eq([[["T","R"], 900, 1200]])
     end
   end
+  
+  describe "get_availability" do
+    it "checks whether a room is available during target time" do
+      room = Room.new(:number=>"ETB1111", :capacity=>100, :available_time=> "MTWRF-800-2100")
+      mtwrf = Timeslot.new(:day=>"MWF", :from_time=>800, :to_time=>850)
+      expect(subject.get_availability(room, mtwrf)).to eq(true)
+    end
+  end
+  
+  
 
 
 

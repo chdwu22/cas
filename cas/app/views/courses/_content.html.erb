@@ -1,0 +1,29 @@
+<% @rooms.each do |room| %>
+  <% course = get_course(room, mtwrf) %>
+  <% preference = get_preference(course, mtwrf) %>
+  <% availability = get_availability(room, mtwrf) %>
+  <% if course != nil %> 
+    <% if preference == 1 %> 
+      <td bgcolor="#CCFFCC"> 
+    <% elsif preference == 3 %> 
+      <td bgcolor="#FFCCCC"> 
+    <% else %> 
+      <td> 
+    <% end %>
+      
+    <% @assigned_courses << course %>
+    <%= link_to course.number, edit_course_path(course) %> 
+    <% if course.user_id!=1 %>
+      <%= course.user.full_name %>
+    <% end %>
+    <br>size: <%= course.size %>
+    </td>
+  <% else %>
+    <% if availability==false %>
+      <td bgcolor="#AAAAAA">
+    <% else %>
+      <td>
+    <% end %>
+    </td>
+  <% end %>
+<% end %>

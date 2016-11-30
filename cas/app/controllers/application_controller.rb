@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_user, :logged_in?, :current_year, :current_semester, 
                 :format_time, :format_day_time, :day_time_display, 
-                :get_preference, :get_course, :get_unassigned_courses
+                :get_preference, :get_course, :get_unassigned_courses, :get_availability
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -377,8 +377,20 @@ class ApplicationController < ActionController::Base
     @courses - @assigned_courses
   end
   
-  
-  
+  def get_availability(room, mtwrf)
+    rats = room.available_time
+    if (rats==nil)
+      return false
+    end
+    room_time_array = parse_available_time(rats)
+    mtwrf_array = parse_available_time(mtwrf.day + "-" +  mtwrf.from_time.to_s + "-" +  mtwrf.to_time.to_s)[0]
+    room_time_array.each do |rta|
+      if include_time?(rta, mtwrf_array)
+        return true
+      end
+    end
+    return false
+  end
   
   
 end

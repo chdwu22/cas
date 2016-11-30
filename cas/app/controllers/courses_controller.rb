@@ -50,7 +50,6 @@ class CoursesController < ApplicationController
   # PATCH/PUT /courses/1
   # PATCH/PUT /courses/1.json
   def update
-    
     #check if user entered time is legit format
     if (course_params[:time]!=nil)
       if(!course_params[:time].strip.empty?)
@@ -60,7 +59,8 @@ class CoursesController < ApplicationController
     
     if(@timelines!=nil)
       radct = room_available_during_course_time?
-      if(radct)
+      fto = faculty_time_overlap?
+      if(radct && !fto)
         if @course.update(course_params)
           flash[:success] = 'Course was successfully updated.'
           redirect_to courses_path
@@ -68,8 +68,14 @@ class CoursesController < ApplicationController
           render :edit 
         end
       else
-        flash[:danger] = "#{@room.building.name} #{@room.number} is not available during this class time"
-        render :edit
+        if !radct
+          flash[:danger] = "#{@room.number} is not available during this class time"
+          render :edit
+        end
+        if fto
+          flash[:danger] = "#{@course.user.full_name} has another class scheduled at this time"
+          render :edit
+        end
       end
     else
       render :edit 
@@ -102,6 +108,20 @@ class CoursesController < ApplicationController
       end
     end
     return r
+  end
+  
+  def faculty_time_overlap?
+    faculty_courses = @course.user.courses
+    faculty_courses.each do |fc|
+      f_time = fc.time.split('-')
+      c_time = course_params[:time].split('-')
+      if(@course.id != fc.id)
+        if(f_time[0][0]==c_time[0][0] && f_time[1]==c_time[1])
+          return true
+        end
+      end
+    end
+    return false
   end
     
 
@@ -194,7 +214,7 @@ class CoursesController < ApplicationController
     
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)
-      @rooms = Room.where("capacity >= ?", @course.size)
+      @rooms = Room.where("capacity >= ?", @course.size).order(:capacity)
       @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
       @buildings = Building.pluck(:name, :id)

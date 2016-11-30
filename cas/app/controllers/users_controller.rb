@@ -65,19 +65,18 @@ class UsersController < ApplicationController
     @TR= Timeslot.where("day=?","TR").order(:from_time)
     
     #course info
-    courses = @user.courses
-    @courses_info=[]
-    if courses !=nil
-      courses.each do |course|
-        str = ""
-        str << course.number << "-" << course.name << course.time
-        if course.room!=nil
-          str << course.room.building.name << course.room.number
-        end
-        @courses_info << str
-      end
-    end
-    return @courses_info
+    @courses = @user.courses
+    # @courses_info=[]
+    # if courses !=nil
+    #   courses.each do |course|
+    #     str = ""
+    #     str << course.number << "-" << course.name << course.time
+    #     if course.room!=nil
+    #       str << course.room.building.name << course.room.number
+    #     end
+    #     @courses_info << str
+    #   end
+    # end
   end
 
   # GET /users/new

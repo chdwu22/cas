@@ -20,7 +20,8 @@
               <% preference = get_preference(course, mwf) %>
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
-                <%= course.number %> 
+                <% @assigned_courses << course %>
+                <%= link_to course.number, edit_course_path(course) %> 
                 <% if course.user_id!=1 %>
                   <%= course.user.full_name %>
                 <% end %>
@@ -39,7 +40,8 @@
               <% preference = get_preference(course, mw) %>
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
-                <%= course.number %> 
+                <% @assigned_courses << course %>
+                <%= link_to course.number, edit_course_path(course) %> 
                 <% if course.user_id!=1 %>
                   <%= course.user.full_name %>
                 <% end %>
@@ -58,7 +60,8 @@
               <% preference = get_preference(course, tr) %>
               <% if preference == 1 %> <td bgcolor="#CCFFCC"> <% elsif preference == 3 %> <td bgcolor="#FFCCCC"> <% else %> <td> <% end %>
               <% if course != nil %> 
-                <%= course.number %> 
+                <% @assigned_courses << course %>
+                <%= link_to course.number, edit_course_path(course) %> 
                 <% if course.user_id!=1 %>
                   <%= course.user.full_name %>
                 <% end %>
@@ -67,6 +70,51 @@
               </td>
             <% end %>
           </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+<div class='row'>
+  <div class="col-sm-8">
+    <h3>Not Assigned Room </h3>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Actions</th>
+          <th>Number</th>
+          <th>Section</th>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Time</th>
+          <th>Faculty</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <% unassigned_courses = get_unassigned_courses %>
+        <% if !unassigned_courses.empty? %>
+          <% unassigned_courses.each do |course| %>
+            <tr>
+              <td><%= link_to 'Assign', edit_course_path(course), class: 'btn btn-sm btn-default' %></td>
+              <td><%= course.number %></td>
+              <td><%= course.section %></td>
+              <td><%= course.name %></td>
+              <td><%= course.size %></td>
+              <td>
+                <% if course.time!=nil %> 
+                  <% if !course.time.empty? %>
+                    <%= day_time_display(course.time) %>
+                  <% end %>
+                <% end %>
+              </td>
+              <td><%= course.user.full_name if course.user.id !=1%></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

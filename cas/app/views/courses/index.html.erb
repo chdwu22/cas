@@ -15,7 +15,7 @@
           <th>Semester</th>
           <th>Room</th>
           <th>Faculty</th>
-          <th colspan="3">Actions</th>
+          <th colspan="2">Actions</th>
         </tr>
       </thead>
     
@@ -27,11 +27,16 @@
               <td><%= course.section %></td>
               <td><%= course.name %></td>
               <td><%= course.size %></td>
-              <td><%= course.time %></td>
+              <td>
+                <% if course.time!=nil %> 
+                  <% if !course.time.empty? %>
+                    <%= day_time_display(course.time) %>
+                  <% end %>
+                <% end %>
+              </td>
               <td><%= course.year %> <%= course.semester %></td>
               <td><% if course.room.id!=1 %><%= course.room.building.name%> <%= course.room.number %><% end %></td>
               <td><%= course.user.full_name if course.user.id !=1%></td>
-              <td><%= link_to 'Show', course %></td>
               <td><%= link_to 'Edit/Schedule', edit_course_path(course) %></td>
               <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             </tr>

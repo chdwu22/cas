@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   before_action :require_admin, only:[:admin_main]
   before_action :get_data, only: [:getcourse, :assignment_table]
   
-  helper_method :get_course, :get_preference
+  helper_method :get_course, :get_preference, :get_unassigned_courses
   
   def root
     if session[:user_id]==nil
@@ -22,6 +22,7 @@ class PagesController < ApplicationController
   end
   
   def assignment_table
+    
   end
   
   def get_course(room, mtwrf)
@@ -60,12 +61,17 @@ class PagesController < ApplicationController
   end
   
   def get_data
-    @courses = Course.all
+    @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
     @rooms = Room.all.order(id: :desc)
     @users = User.all
     @MWF= Timeslot.where("day=?","MWF").order(:from_time)
     @MW= Timeslot.where("day=?","MW").order(:from_time)
     @TR= Timeslot.where("day=?","TR").order(:from_time)
+    @assigned_courses=[]
+  end
+  
+  def get_unassigned_courses
+    @courses - @assigned_courses
   end
   
   

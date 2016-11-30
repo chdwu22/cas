@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
-  helper_method :current_user, :logged_in?, :current_year, :current_semester, :format_time, :format_day_time
+  helper_method :current_user, :logged_in?, :current_year, :current_semester, 
+                :format_time, :format_day_time, :day_time_display
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -37,6 +38,13 @@ class ApplicationController < ActionController::Base
     Systemvariable.find_by(:name=>"scheduling_semester").value
   end
   
+  #format string WM-1320-1420 to WM 1:20-2:20
+  def day_time_display(str)
+    strings = str.strip.split('-')
+    daytime=""
+    daytime << strings[0].to_s << " " << format_time(strings[1].to_s + "-" + strings[2].to_s)
+    return daytime
+  end
   #format string 1320-1420 to 1:20-2:20
   def format_time(ts)
     time_slot = ts.split('-')

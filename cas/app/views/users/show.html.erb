@@ -3,21 +3,44 @@
   <%= link_to 'Edit profile', edit_user_path(@user), class: 'btn btn-default btn-sm'%>
 </div><br><br>
 
-<div align="center">
-  <h4>Assigned courses:</h4>
-  <% if !@courses_info.empty? %>
-    <% @courses_info.each do |c| %>
-      <%= c %> <br>
-    <% end %>
+<div class="col-xs-7 col-xs-offset-1">
+  <% if !@courses.empty? %>
+    <h4>Assigned courses:</h4>
+    <table class="table table-striped">
+      <th>Number</th>
+      <th>Name</th>
+      <th>Section</th>
+      <th>Size</th>
+      <th>Room</th>
+      <th>Time</th>
+      <% @courses.each do |course| %>
+        <tr>
+          <td><%= course.number %></td>
+          <td><%= course.name %></td>
+          <td><%= course.section %></td>
+          <td><%= course.size %></td>
+          <td><%= course.room.building.name %> <%= course.room.number %></td>
+          <td>
+            <% if course.time!=nil %> 
+              <% if !course.time.empty? %>
+                <%= day_time_display(course.time) %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
-</div><br><br>
+</div>
+
 
 <%= form_tag("/set_preference", method: "get") do %>
   <%= hidden_field_tag :id, @user.id %>
   <div class="col-xs-7 col-xs-offset-1">
-    <h5><b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable</h5>
-    <h5>Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b></h5>
-    <h5>Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b></h5>
+    <h4>Preferences:</h4>
+    <b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable <br>
+    Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b> <br>
+    Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b> <br>
     <table class="table table-striped">
       <% if @user_pref.empty? %>
         <tr>
@@ -64,7 +87,7 @@
           <% end %>
         </tr>
         <tr>
-          <td height="50"></td>
+          <td height="30"></td>
         </tr>
         <tr>
           <td>
@@ -137,7 +160,7 @@
           <% end %>
         </tr>
         <tr>
-          <td height="50"></td>
+          <td height="30"></td>
         </tr>
         <tr>
           <td>

@@ -104,11 +104,20 @@ class CoursesController < ApplicationController
   end
   
   def add_to_current_courses
-    @origin_course = Course.find(params[:id])
+    @current_courses = set_courses
+    @course_repo = Course.where("year=?",0).order(:number)
+    origin_course = Course.find(params[:id])
+    @current_courses.each do |cc|
+      if cc.number == origin_course.number
+        flash.now[:danger] = "Course already added"
+        render :get_course_repo
+        return
+      end
+    end
     
     @course = Course.new
-    @course.number = @origin_course.number
-    @course.name = @origin_course.name
+    @course.number = origin_course.number
+    @course.name = origin_course.name
     @course.size = 0
     @course.year = Systemvariable.find_by(:name=> "scheduling_year").value.to_i
     @course.semester = Systemvariable.find_by(:name=> "scheduling_semester").value
@@ -130,7 +139,7 @@ class CoursesController < ApplicationController
     end
     
     def set_courses
-      @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
+      @courses = Course.where(year: current_year, semester: current_semester ).order(:number)
       #@courses = Course.where(:conditions=>["year=? and semester=?", current_year, current_semester])
     end
 

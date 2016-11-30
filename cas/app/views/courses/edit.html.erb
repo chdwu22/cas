@@ -92,7 +92,6 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Building</th>
                       <th>Number</th>
                       <th>Capacity</th>
                       <th>Available time</th>
@@ -104,7 +103,6 @@
                       <% if room.capacity >= @course.size %>
                         <tr>
                           <td><b><%= room.id %></b></td>
-                          <td><%= room.building.name %></td>
                           <td><%= room.number %></td>
                           <td><%= room.capacity %></td>
                           <td>

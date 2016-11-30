@@ -35,7 +35,7 @@
                 <% end %>
               </td>
               <td><%= course.year %> <%= course.semester %></td>
-              <td><% if course.room.id!=1 %><%= course.room.building.name%> <%= course.room.number %><% end %></td>
+              <td><% if course.room.id!=1 %><%= course.room.number %><% end %></td>
               <td><%= course.user.full_name if course.user.id !=1%></td>
               <td><%= link_to 'Edit/Schedule', edit_course_path(course) %></td>
               <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -49,4 +49,4 @@
 
 <br>
 
-<%= link_to 'New Course', new_course_path %>
+<%= link_to 'New Course', get_course_repo_path %>

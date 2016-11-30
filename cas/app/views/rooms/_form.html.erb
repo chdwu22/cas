@@ -1,11 +1,6 @@
 <%= render 'shared/errors', obj: room %>
 <%= form_for(room) do |f| %>
   <div class="field">
-    <%= f.label "building" %>
-    <%= f.select :building_id, options_for_select(@buildings, @room.building_id) %>
-  </div>
-  
-  <div class="field">
     <%= f.label "number *" %>
     <%= f.text_field :number %>
   </div>
@@ -18,9 +13,9 @@
   <div class="field">
     <%= f.label "available time" %>
     example: <br>
-    MW-800-1530,<br>
-    T-900-1700,<br>
-    F-1000-1500<br>
+    MTWRF-800-2100,<br>
+    TR-1000-1700,<br>
+    MW-800-1500<br>
     <%= f.text_area :available_time, rows: 6 %>
   </div>
 

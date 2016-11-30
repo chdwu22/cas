@@ -6,7 +6,7 @@
         <tr>
           <th width="150"></th>
           <% @rooms.each do |room| %>
-            <th> <%= room.building.name %> <%= room.number %> [<%= room.capacity %>] </th> 
+            <th> <%= room.number %> [<%= room.capacity %>] </th> 
           <% end %>
         </tr>
       </thead>

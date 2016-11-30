@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   helper_method :current_user, :logged_in?, :current_year, :current_semester, 
-                :format_time, :format_day_time, :day_time_display
+                :format_time, :format_day_time, :day_time_display, 
+                :get_preference, :get_course, :get_unassigned_courses
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -56,7 +57,6 @@ class ApplicationController < ActionController::Base
   # convert integer mt = 800 to string nt = 8:00
   def to_normal_time(mt)
     hour = (mt/100)
-    hour = (hour>12)? hour-12 : hour
     min = (mt%100 ==0)? "00" : (mt%100).to_s
     return hour.to_s+":"+min
   end
@@ -194,21 +194,21 @@ class ApplicationController < ActionController::Base
     t2 = to_int_time(time2)
     
     i=0
-    while i < t2.count/2  do
+    while i < t2.count  do
       short_st = t2[i]
       short_et = t2[i+1]
       j=0
-      while j < t1.count/2  do
+      while j < t1.count  do
         long_st = t1[j]
         long_et = t1[j+1]
-        if(short_st < long_st || short_et > long_et)
-          return false
+        if(short_st >= long_st && short_et <= long_et)
+          return true
         end
         j +=2
       end
       i +=2
     end
-    return true
+    return false
   end
   
   ##############################################################################
@@ -220,7 +220,7 @@ class ApplicationController < ActionController::Base
       times1 = subtract_time_group_helper(times1, ts2)
     end
     return times1
-    return to_array_time(result.flatten)
+    #return to_array_time(result.flatten)
   end
   #many to one
   def subtract_time_group_helper(times1, time2)
@@ -338,7 +338,44 @@ class ApplicationController < ActionController::Base
   ##############################################################################
   
   
+  def get_course(room, mtwrf)
+    @courses.each do |course|
+      if course.time!=nil
+        arr = course.time.split('-')
+        day = arr[0]
+        from_time = arr[1].to_i
+        if(course.room_id == room.id && day==mtwrf.day && from_time == mtwrf.from_time)
+          return course
+        end
+      end 
+    end
+    return nil
+  end
   
+  def get_preference(course, mtwrf)
+    if course!=nil
+      if course.user_id != 1
+        pref = TimeslotUser.where("user_id=?",course.user_id).includes(:timeslot)
+        if pref != nil
+          pref.each do |p|
+            if (p.timeslot.day == mtwrf.day && p.timeslot.from_time == mtwrf.from_time)
+              return p.preference_type
+            end
+          end
+        else
+          return 2
+        end
+      else
+        return 2
+      end
+    else
+      return 2
+    end
+  end
+  
+  def get_unassigned_courses
+    @courses - @assigned_courses
+  end
   
   
   

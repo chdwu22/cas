@@ -38,7 +38,7 @@
   
   <div class="field">
     <%= f.label :time%>
-    <%= f.select :time, options_for_select(@timeslots, :include_blank => true) %>
+    <%= f.select :time, options_for_select(@timeslots, course.time) %>
   </div>
   
   <div class="field">

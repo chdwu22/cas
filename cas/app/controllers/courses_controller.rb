@@ -74,14 +74,36 @@ class CoursesController < ApplicationController
     else
       render :edit 
     end
-    
-    #if @course.update(course_params)
-    #  flash[:success] = 'Course was successfully updated.'
-    #  redirect_to courses_path
-    #else
-    #  render :edit
-    #end
   end
+  
+  def room_available_during_course_time?
+    course_time = parse_available_time(course_params[:time])
+    @room = Room.find(course_params[:room_id])
+    
+    if @room.id==1
+      return true
+    end
+    if @room.available_time==nil
+      flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+      return false
+    else
+      if @room.available_time.empty?
+        flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+        return false
+      end
+    end
+    #room_available_time = parse_available_time(@room.available_time)
+    room_available_time = room_availability(@room)
+    
+    r = false
+    room_available_time.each do |t|
+      if include_time?(t, course_time[0])
+        r = true
+      end
+    end
+    return r
+  end
+    
 
   # DELETE /courses/1
   # DELETE /courses/1.json
@@ -148,35 +170,6 @@ class CoursesController < ApplicationController
       params.require(:course).permit(:number, :section, :name, :size, :day, :time, :year, :semester, :room_id, :user_id)
     end
     
-    def room_available_during_course_time?
-      course_time = parse_available_time(course_params[:time])
-      @room = Room.find(course_params[:room_id])
-      
-      if @room.id==1
-        return true
-      end
-      if @room.available_time==nil
-        flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
-        return false
-      else
-        if @room.available_time.empty?
-          flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
-          return false
-        end
-      end
-      #room_available_time = parse_available_time(@room.available_time)
-      room_available_time = room_availability(@room)
-      course_time.each do |ct|
-        r = false
-        room_available_time.each do |t|
-          if include_time?(t, ct)
-            r = true
-          end
-        end
-        return r
-      end
-    end
-    
     def room_availability(room)
       if (room.available_time==nil || room.id==1)
         return nil
@@ -201,7 +194,8 @@ class CoursesController < ApplicationController
     
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)
-      @rooms = Room.order(:building_id, :number)
+      @rooms = Room.where("capacity >= ?", @course.size)
+      @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:id)
       @buildings = Building.pluck(:name, :id)
       timeslots = Timeslot.all
@@ -211,6 +205,7 @@ class CoursesController < ApplicationController
       @days = Systemvariable.where("name=?","day")
       @times = Systemvariable.where("name=?", "time")
       @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
+      @assigned_courses=[]
       @timeslots = []
       timeslots.each do |ts|
         str = ts.day + "-" + ts.from_time.to_s + "-" + ts.to_time.to_s
@@ -233,5 +228,10 @@ class CoursesController < ApplicationController
     end
   
   
+    
+    
+    
+    
+    
   
 end

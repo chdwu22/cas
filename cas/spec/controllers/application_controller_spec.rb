@@ -32,6 +32,7 @@ describe ApplicationController do
       expect(subject.include_time?([["T"],800,1000], [["T"],800,900])).to eq(true)
       expect(subject.include_time?([["T","R"],800,900], [["F"],800,900])).to eq(false)
       expect(subject.include_time?([["T","R"],800,900], [["T"],800,910])).to eq(false)
+      expect(subject.include_time?([["M","W","F"],800,2100], [["M","W","F"],800,850])).to eq(true)
     end
   end
   
@@ -86,6 +87,7 @@ describe ApplicationController do
     it "subtract time group" do
       expect(subject.subtract_time_group([[["M","T"], 800, 1200], [["W"], 800, 1000]],[[["M"], 830, 900], [["W"], 800, 900]])).to eq([[["M"], 900, 1200],[["T"],800,1200], [["W"], 900, 1000]])
       expect(subject.subtract_time_group([[["M"], 800, 900], [["W"], 800, 1000]],[[["M"], 800, 900]])).to eq([[["W"], 800, 1000]])
+      expect(subject.subtract_time_group([[["M","W","F"], 800, 900], [["T","R"], 900, 1200]],[[["M","W","F"], 800, 850]])).to eq([[["T","R"], 900, 1200]])
     end
   end
 

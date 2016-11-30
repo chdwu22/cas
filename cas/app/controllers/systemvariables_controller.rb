@@ -99,27 +99,46 @@ class SystemvariablesController < ApplicationController
     end
   end
   
-  def unacceptable_time_slot_limit
+  # def unacceptable_time_slot_limit
+  #   @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+  # end
+  
+  # def set_unacceptable_limit
+  #   @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+  #   @unacceptable_time_slot_limit.value = params[:limit]
+  #   @unacceptable_time_slot_limit.save
+  #   flash[:success] = "New limit has set to #{@unacceptable_time_slot_limit.value}"
+  #   redirect_to unacceptable_time_slot_limit_path
+  # end
+  
+  # def preferred_slot_limit
+  #   @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
+  # end
+  
+  # def set_preferred_limit
+  #   @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
+  #   @preferred_slot_limit.value = params[:limit]
+  #   @preferred_slot_limit.save
+  #   flash[:success] = "New limit has set to #{@preferred_slot_limit.value}"
+  #   redirect_to preferred_time_slot_limit_path
+  # end
+  
+  def preference_limits
+    @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
   end
   
-  def set_unacceptable_limit
-    @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
-    @unacceptable_time_slot_limit.value = params[:limit]
-    @unacceptable_time_slot_limit.save
-    flash[:success] = "New limit has set to #{@unacceptable_time_slot_limit.value}"
-    redirect_to unacceptable_time_slot_limit_path
-  end
-  
-  def preferred_slot_limit
+  def set_preference_limits
     @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
-  end
-  
-  def set_preferred_limit
-    @preferred_slot_limit = Systemvariable.find_by(:name=>"preferred_time_slot_limit")
-    @preferred_slot_limit.value = params[:limit]
+    @preferred_slot_limit.value = params[:preferred_limit]
     @preferred_slot_limit.save
-    flash[:success] = "New limit has set to #{@preferred_slot_limit.value}"
-    redirect_to preferred_time_slot_limit_path
+    
+    @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
+    @unacceptable_time_slot_limit.value = params[:unacceptable_limit]
+    @unacceptable_time_slot_limit.save
+    
+    flash[:success] = "New limit has set. Preferred: #{@preferred_slot_limit.value.to_s}, unacceptable: #{@unacceptable_time_slot_limit.value.to_s}"
+    redirect_to root_path
   end
+  
 end

@@ -94,9 +94,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.full_name = @user.first_name + " " + @user.last_name
     if @user.save
-      session[:user_id] = @user.id
-      flash[:success] = 'You have successfully signed up.'
-      redirect_to @user
+      #session[:user_id] = @user.id
+      flash[:success] = 'Faculty successfully added.'
+      redirect_to users_path
     else
       render :new
     end
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
       end
     end
     @user.destroy
-    flash[:danger] = 'User was successfully deleted.'
+    flash[:success] = 'User was successfully deleted.'
     redirect_to users_url
   end
   
@@ -157,6 +157,18 @@ class UsersController < ApplicationController
     end
   end
   
+  def reset_faculty_preference
+    
+  end
+  
+  def execute_reset_faculty_preferences
+    timeslot_user = TimeslotUser.all
+    timeslot_user.each do |tu|
+      tu.destroy
+    end
+    redirect_to root_path
+    flash[:success] = "All faculty preferences are reset to default."
+  end
   
   private
     # Use callbacks to share common setup or constraints between actions.

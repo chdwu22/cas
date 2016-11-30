@@ -1,46 +1,28 @@
-<div class="row">
-  <div class="col-sm-2">
+<br><br>
+<div class="row" >
+  <div class="col-sm-3">
     <dl>
-      <dt>Faculty</dt>
-      <dd><%= link_to 'Add faculty', new_user_path %></dd>
-      <dd><%= link_to 'Faculty list', users_path %></dd>
+      <dt align="center">Resources</dt>
+      <dd vspcae="30"><%= link_to 'Add faculty', new_user_path, class:'btn btn-sm btn-default btn-block' %></dd>
+      <dd><%= link_to 'Add room', new_room_path, class:'btn btn-sm btn-default  btn-block'  %></dd>
+      <dd><%= link_to 'Add course', get_course_repo_path, class:'btn btn-sm btn-default  btn-block'  %></dd>
+      <dd><%= link_to 'Course repository',  new_course_path, class:'btn btn-sm btn-default  btn-block' %></dd>
     </dl>
   </div>
-  <div class="col-sm-2">
-    <dl>
-      <dt>Rooms</dt>
-      <dd><%= link_to 'Add room', new_room_path %></dd>
-      <dd><%= link_to 'Room list', rooms_path %></dd>
-    </dl>
-  </div>
-  <div class="col-sm-2">
-    <dl>
-      <dt>Courses</dt>
-      <dd><%= link_to 'Add course', get_course_repo_path %></dd>
-      <dd><%= link_to 'Schedule/edit courses', courses_path %></dd>
-      <dd><%= link_to 'View by faculty', assignment_by_faculty_path %></dd>
-      <dd><%= link_to 'Course repository',  new_course_path%></dd>
+  <div class="col-sm-3">
+    <dl align="center">
+      <dt>Schedule Courses</dt>
+      <dd><%= link_to 'Schedule courses', courses_path, class:'btn btn-sm btn-default btn-block'  %></dd>
+      <dd><%= link_to 'View by faculty', assignment_by_faculty_path, class:'btn btn-sm btn-default btn-block'  %></dd>
     </dl>
   </div>
 
-  <!--
-  <div class="col-sm-2">
-    <dl>
-      <dt>Time Slots</dt>
-      <dd><%= link_to 'Add Days', new_day_path %></dd>
-      <dd><%= link_to 'Add Time Slots', new_time_path %></dd>
-      <dd><%= link_to 'Update time table', new_time_table_path %></dd>
-      <dd><%= link_to 'View time table', time_table_path %></dd>
-      <dd><%= link_to 'Add A&M Timetable', anm_table_path %></dd>
-    </dl>
-  </div>
-  -->
-  <div class="col-sm-2">
-    <dl>
+  <div class="col-sm-3">
+    <dl align="center">
       <dt>Faculty preferences</dt>
-      <dd><%= link_to "Set faculty edit permission", faculty_edit_permission_path %></dd>
-      <dd><%= link_to 'Set "unacceptable" limit', unacceptable_time_slot_limit_path %></dd>
-      <dd><%= link_to 'Set "preferred" limit', preferred_time_slot_limit_path %></dd>
+      <dd><%= link_to "Set faculty edit permission", faculty_edit_permission_path, class:'btn btn-sm btn-default btn-block'  %></dd>
+      <dd><%= link_to "Reset faculty preferences", reset_faculty_preference_path, class:'btn btn-sm btn-default btn-block'  %></dd>
+      <dd><%= link_to 'Set preference limits', preference_limits_path, class:'btn btn-sm btn-default btn-block'  %></dd>
     </dl>
   </div>
 </div>

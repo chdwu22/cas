@@ -19,7 +19,7 @@
             <li><%= link_to 'Faculty List', users_path %></li>
             <li><%= link_to 'Room List', rooms_path %></li>
             <li><%= link_to 'Course List', courses_path %></li>
-            <li><%= link_to 'View Time Table', assignment_table_path, class: 'btn btn-lg btn-default' %></li>
+            <li><%= link_to 'View Time Table', assignment_table_path, class: 'btn btn-default' %></li>
             <li><%= link_to "Scheduling for: #{current_year} #{current_semester}", get_current_semester_path%></li>
           </ul>
         <% end %>

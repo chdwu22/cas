@@ -77,4 +77,6 @@ class TimeslotUsersController < ApplicationController
     end
     return timeslot_user
   end
+  
+  
 end

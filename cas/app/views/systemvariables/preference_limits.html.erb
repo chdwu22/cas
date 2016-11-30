@@ -1,0 +1,18 @@
+<br><br>
+<div>
+<%= form_tag("/set_preference_limits", method: "get") do %>
+  <div class="field">
+    <%= label_tag(:preferred_limit, "Preferred: current #{@preferred_slot_limit.value}") %>
+    <%= number_field_tag(:preferred_limit, @preferred_slot_limit.value) %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag(:unacceptable_limit, "Unacceptable:") %>
+    <%= number_field_tag(:unacceptable_limit, @unacceptable_time_slot_limit.value) %>
+  </div>
+  
+  <div class="actions">
+    <%= submit_tag("Update") %>
+  </div>
+<% end %>
+</div>

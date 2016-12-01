@@ -112,17 +112,16 @@ class CoursesController < ApplicationController
   end
   
   def faculty_time_overlap?
-    course_id = course_params[:id]
-    user_id = course_params[:user_id]
+    user_id = course_params[:user_id].to_i
     user = User.find(user_id)
-    if user_id.to_i==1
+    if user_id==1
       return false
     end
     faculty_courses = user.courses
     faculty_courses.each do |fc|
       f_time = fc.time.split('-')
       c_time = course_params[:time].split('-')
-      if(course_id != fc.id)
+      if(@course.id != fc.id)
         if(f_time[0][0]==c_time[0][0] && f_time[1]==c_time[1])
           return true
         end

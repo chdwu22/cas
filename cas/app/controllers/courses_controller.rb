@@ -57,6 +57,7 @@ class CoursesController < ApplicationController
       end
     end
     
+    user = User.find(course_params[:user_id])
     if(@timelines!=nil)
       radct = room_available_during_course_time?
       fto = faculty_time_overlap?
@@ -73,7 +74,7 @@ class CoursesController < ApplicationController
           render :edit
         end
         if fto
-          flash.now[:danger] = "#{@course.user.full_name} has another class scheduled at this time"
+          flash.now[:danger] = "#{user.full_name} has another class scheduled at this time"
           render :edit
         end
       end
@@ -111,14 +112,18 @@ class CoursesController < ApplicationController
   end
   
   def faculty_time_overlap?
-    if @course.user.id==1
+    course_id = course_params[:id]
+    user_id = course_params[:user_id]
+    user = User.find(user_id)
+    if user_id.to_i==1
       return false
     end
-    faculty_courses = @course.user.courses
+    flash[:success] = user_id.to_s
+    faculty_courses = user.courses
     faculty_courses.each do |fc|
       f_time = fc.time.split('-')
       c_time = course_params[:time].split('-')
-      if(@course.id != fc.id)
+      if(course_id != fc.id)
         if(f_time[0][0]==c_time[0][0] && f_time[1]==c_time[1])
           return true
         end

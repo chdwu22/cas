@@ -79,7 +79,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-    @user.full_name = @user.first_name + " " + @user.last_name
+    @user.full_name = @user.last_name + ", " + @user.first_name
     if @user.save
       #session[:user_id] = @user.id
       flash[:success] = 'Faculty successfully added.'
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     if @user.update(user_params)
-      @user.full_name = @user.first_name + " " + @user.last_name
+      @user.full_name = @user.last_name + ", " + @user.first_name
       @user.update(user_params)
       if !current_user.is_admin
         redirect_to user_path(@user)

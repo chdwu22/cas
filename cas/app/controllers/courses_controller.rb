@@ -118,7 +118,6 @@ class CoursesController < ApplicationController
     if user_id.to_i==1
       return false
     end
-    flash[:success] = user_id.to_s
     faculty_courses = user.courses
     faculty_courses.each do |fc|
       f_time = fc.time.split('-')

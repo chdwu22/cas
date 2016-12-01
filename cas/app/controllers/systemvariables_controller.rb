@@ -4,6 +4,7 @@ class SystemvariablesController < ApplicationController
   def get_current_semester
     @year = Systemvariable.find_by(:name =>"scheduling_year")
     @semester = Systemvariable.find_by(:name =>"scheduling_semester")
+    @semesters = ["Fall", "Summer", "Spring"]
   end
   
   def set_current_semester

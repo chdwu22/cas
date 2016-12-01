@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy, :schedule_course]
   before_action :require_admin
-  before_action :set_courses, only: [:index, :assign_room, :set_course_time]
+  before_action :set_courses, only: [:index, :assign_room, :set_course_time, :delete_all_courses]
   before_action :render_edit, only: [:edit, :update]
   
   helper_method :room_availability, :get_option
@@ -153,7 +153,28 @@ class CoursesController < ApplicationController
     return ra
   end
     
-
+  def copy_courses
+    previous_year = params[:previous_year]
+    previous_semester = params[:previous_semester]
+    courses = Course.where(:year=>previous_year, :semester=>previous_semester)
+    if courses!=nil
+      if !courses.empty?
+        courses.each do |course|
+          Course.create(:number=>course.number, :name=>course.name, :size=>course.size, 
+                        :time=>course.time, :year=>current_year, :semester=>current_semester,
+                        :room_id=>course.room_id, :user_id=>course.user_id)
+        end
+        flash[:success] = "Courses from #{previous_year} #{previous_semester} are successfully copied."
+      else
+        flash[:danger] = "#{previous_year} #{previous_semester} does not have courses."
+      end
+    else
+      flash[:danger] = "#{previous_year} #{previous_semester} does not have courses."
+    end
+    
+    redirect_to get_course_repo_path
+  end
+  
   # DELETE /courses/1
   # DELETE /courses/1.json
   def destroy
@@ -169,9 +190,19 @@ class CoursesController < ApplicationController
     redirect_to new_course_path
   end
   
+  def delete_all_courses
+    @courses.each do |course|
+      course.destroy
+    end
+    flash[:success] = "All current semester courses are deleted."
+    redirect_to get_course_repo_path
+  end
+  
   def get_course_repo
     @course_repo = Course.where("year=?",0).order(:number)
     @current_courses = set_courses
+    @year = Systemvariable.find_by(:name =>"scheduling_year")
+    @semester = Course.where.not(:year=>0).pluck(:semester).uniq
   end
   
   def add_to_current_courses

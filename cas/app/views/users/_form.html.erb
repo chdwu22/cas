@@ -1,12 +1,12 @@
 <%= render 'shared/errors', obj: @user %>
 <div class='row'>
-  <div class="col-sm-12">
+  <div class="col-sm-8">
     <%= form_for(@user, :html =>{class: "form-horizontal", role: "form"}) do |f| %>
       <div class="form-group">
         <div class="control-label col-sm-2">
           <%= f.label :first_name %>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-4">
           <%= f.text_field :first_name, class: "form-control", placeholder: "Enter your first name", autofocus: true %>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <div class="control-label col-sm-2">
           <%= f.label :last_name %>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-4">
           <%= f.text_field :last_name, class: "form-control", placeholder: "Enter your last name", autofocus: true %>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="control-label col-sm-2">
           <%= f.label :email %>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-4">
           <%= f.email_field :email, class: "form-control", placeholder: "Enter your email", autofocus: true %>
         </div>
       </div>
@@ -33,13 +33,13 @@
         <div class="control-label col-sm-2">
           <%= f.label :password%>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-4">
           <%= f.password_field :password, class: "form-control", autocomplete: false%>
         </div>
       </div>
     
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-2 col-sm-6">
           <%= f.submit class: 'btn btn-default'%>
         </div>
       </div>

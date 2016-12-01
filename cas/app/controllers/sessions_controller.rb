@@ -7,7 +7,6 @@ class SessionsController < ApplicationController
     if user 
       if user.authenticate(params[:session][:password])
         session[:user_id] = user.id
-        flash[:success] = "Successfully logged in"
         if !user.is_admin
           redirect_to user_path(:id => user.id)
         else

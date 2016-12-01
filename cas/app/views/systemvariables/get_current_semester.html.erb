@@ -1,13 +1,8 @@
+<h3>Set current semester to:</h3>
 <%= form_tag("/set_current_semester", method: "get") do %>
   <div class="field">
-    <%= label_tag(:scheduling_year, "Year") %>
-    <%= number_field_tag(:year, @year.value) %>
-  </div>
-  <div class="field">
-    <%= label_tag(:scheduling_semester, "Semester") %>
-    <%= text_field_tag(:semester, @semester.value) %>
-  </div>
-  <div class="actions">
-    <%= submit_tag("Update") %>
+    <%= number_field_tag(:year, @year.value, :style => "float:left;") %>
+    <%= select_tag :semester, options_for_select(@semesters), :style => "float:left;"%>
+    <%= submit_tag "Update", class:'btn btn-sm btn-default', :style => "float:left;"%>
   </div>
 <% end %>

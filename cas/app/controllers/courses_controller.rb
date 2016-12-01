@@ -172,16 +172,16 @@ class CoursesController < ApplicationController
   end
   
   def add_to_current_courses
-    @current_courses = set_courses
+    #@current_courses = set_courses
     @course_repo = Course.where("year=?",0).order(:number)
     origin_course = Course.find(params[:id])
-    @current_courses.each do |cc|
-      if cc.number == origin_course.number
-        flash.now[:danger] = "#{origin_course.number} was already added"
-        render :get_course_repo
-        return
-      end
-    end
+    # @current_courses.each do |cc|
+    #   if cc.number == origin_course.number
+    #     flash.now[:danger] = "#{origin_course.number} was already added"
+    #     render :get_course_repo
+    #     return
+    #   end
+    # end
     
     @course = Course.new
     @course.number = origin_course.number

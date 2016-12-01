@@ -37,13 +37,13 @@
   </div>
   
   <div class="field">
-    <%= f.label :time%>
-    <%= f.select :time, options_for_select(@timeslots, course.time) %>
+    <%= f.label :room_id %>
+    <%= f.select :room_id, options_for_select(@rooms_select, course.room_id) %>
   </div>
   
   <div class="field">
-    <%= f.label :room_id %>
-    <%= f.select :room_id, options_for_select(@rooms_select, course.room_id) %>
+    <%= f.label :time%>
+    <%= f.select :time, options_for_select(@timeslots, course.time) %>
   </div>
 
   <div class="actions">

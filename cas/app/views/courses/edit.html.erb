@@ -8,71 +8,68 @@
     <td width="100"></td>
     <td valign="top">
       <table>
-        
         <!-- faculty preference  -->
         <tr>
           <td>
             <% if @course.user_id!=1 %>
-              <h4><%= @course.user.full_name %> preference
-              <% if @user_pref.empty? %> 
-                NOT set
-              <% end %>
-              </h4>
-              <div class='row'>
-                <div class="col-xs-9">
-                  <table class="table table-hover">
-                    <tr>
-                      <td></td>
-                      <% @MWF.each do |mwf| %>
-                        <td><%= format_time(mwf.from_time.to_s+"-"+mwf.to_time.to_s) %></td>
-                      <% end %>
-                      <% @MW.each do |mw| %>
-                        <td><%= format_time(mw.from_time.to_s+"-"+mw.to_time.to_s) %></td>
-                      <% end %>
-                    </tr>
-                    <tr>
-                      <td>MWF</td>
-                      <% @MWF.each do |mwf| %>
-                        <% option = get_option(mwf) %>
-                        <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-                        <%= option[1] %></td>
-                      <% end %>
-                      <% @MW.each do%>
+              <% if !@user_pref.empty? %> 
+                <h4><%= @course.user.full_name %> preference</h4>
+                <div class='row'>
+                  <div class="col-xs-9">
+                    <table class="table table-hover">
+                      <tr>
                         <td></td>
-                      <% end %>
-                    </tr>
-                    <tr>
-                      <td>MW</td>
-                      <% @MWF.each do%>
-                        <td></td>
-                      <% end %>
-                      <% @MW.each do |mw| %>
-                        <% option = get_option(mw) %>
-                        <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-                        <%= option[1] %></td>
-                      <% end %>
-                    </tr>
-                    <tr>
-                      <td height="20"></td>
-                    </tr>
-                    <tr>
-                      <td>
-                      <% @TR.each do |tr| %>
-                        <td><%= format_time(tr.from_time.to_s+"-"+tr.to_time.to_s) %></td>
-                      <% end %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>TR</td>
-                      <% @TR.each do |tr| %>
-                        <% option = get_option(tr) %>
-                        <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-                        <%= option[1] %></td>
-                      <% end %>
-                    </tr>
-                  </table>
+                        <% @MWF.each do |mwf| %>
+                          <td><%= format_time(mwf.from_time.to_s+"-"+mwf.to_time.to_s) %></td>
+                        <% end %>
+                        <% @MW.each do |mw| %>
+                          <td><%= format_time(mw.from_time.to_s+"-"+mw.to_time.to_s) %></td>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>MWF</td>
+                        <% @MWF.each do |mwf| %>
+                          <% option = get_option(mwf) %>
+                          <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+                          <%= option[1] %></td>
+                        <% end %>
+                        <% @MW.each do%>
+                          <td></td>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td>MW</td>
+                        <% @MWF.each do%>
+                          <td></td>
+                        <% end %>
+                        <% @MW.each do |mw| %>
+                          <% option = get_option(mw) %>
+                          <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+                          <%= option[1] %></td>
+                        <% end %>
+                      </tr>
+                      <tr>
+                        <td height="20"></td>
+                      </tr>
+                      <tr>
+                        <td>
+                        <% @TR.each do |tr| %>
+                          <td><%= format_time(tr.from_time.to_s+"-"+tr.to_time.to_s) %></td>
+                        <% end %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>TR</td>
+                        <% @TR.each do |tr| %>
+                          <% option = get_option(tr) %>
+                          <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+                          <%= option[1] %></td>
+                        <% end %>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
-              </div>
+              <% end %>
             <% end %>
           </td>
         </tr>
@@ -80,7 +77,7 @@
         <!-- room availability in table -->
         <tr>
           <td>
-            <h4>Room Availability</h4>
+            <h4>Available Rooms</h4>
             <%= render './pages/timetable' %>
           </td>
         </tr>
@@ -88,6 +85,7 @@
         <!-- room availability in numbers -->
         <tr>
           <td>
+            <h4>Room Availability</h4>
             <div class='row'>
               <div class="col-xs-9">
                 <table class="table table-hover">

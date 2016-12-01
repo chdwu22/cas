@@ -1,11 +1,11 @@
 <%= form_tag("/set_current_semester", method: "get") do %>
   <div class="field">
     <%= label_tag(:scheduling_year, "Year") %>
-    <%= number_field_tag(:year) %>
+    <%= number_field_tag(:year, @year.value) %>
   </div>
   <div class="field">
     <%= label_tag(:scheduling_semester, "Semester") %>
-    <%= text_field_tag(:semester) %>
+    <%= text_field_tag(:semester, @semester.value) %>
   </div>
   <div class="actions">
     <%= submit_tag("Update") %>

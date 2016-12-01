@@ -63,17 +63,17 @@ class CoursesController < ApplicationController
       if(radct && !fto)
         if @course.update(course_params)
           flash[:success] = 'Course was successfully updated.'
-          redirect_to courses_path
+          redirect_to edit_course_path(@course)
         else
           render :edit 
         end
       else
         if !radct
-          flash[:danger] = "#{@room.number} is not available during this class time"
+          flash.now[:danger] = "#{@room.number} is not available during this class time"
           render :edit
         end
         if fto
-          flash[:danger] = "#{@course.user.full_name} has another class scheduled at this time"
+          flash.now[:danger] = "#{@course.user.full_name} has another class scheduled at this time"
           render :edit
         end
       end
@@ -126,20 +126,43 @@ class CoursesController < ApplicationController
     end
     return false
   end
+  
+  
+  def room_availability(room)
+    if (room.available_time==nil || room.id==1)
+      return nil
+    end
+    if room.available_time.empty?
+      return nil
+    end
+    ra = parse_available_time(room.available_time)
+    @courses = set_courses
+    @courses.each do |course|
+      ct = course.time
+      if(course.room_id==room.id && course.id!=@course.id)
+        if ct!=nil
+          if !ct.empty?
+            ra = subtract_time_group(ra,parse_available_time(ct))
+          end
+        end
+      end
+    end
+    return ra
+  end
     
 
   # DELETE /courses/1
   # DELETE /courses/1.json
   def destroy
     @course.destroy
-    flash[:success] = 'Course was successfully deleted.'
+    flash[:success] = "#{@course.number} was successfully deleted."
     redirect_to :back
   end
   
   def delete_course_repo
     @course = Course.find(params[:id])
     @course.destroy
-    flash[:success] = 'Course was successfully deleted.'
+    flash[:success] = "#{@course.number} was successfully deleted."
     redirect_to new_course_path
   end
   
@@ -154,7 +177,7 @@ class CoursesController < ApplicationController
     origin_course = Course.find(params[:id])
     @current_courses.each do |cc|
       if cc.number == origin_course.number
-        flash.now[:danger] = "Course already added"
+        flash.now[:danger] = "#{origin_course.number} was already added"
         render :get_course_repo
         return
       end
@@ -170,7 +193,7 @@ class CoursesController < ApplicationController
     @course.user_id = 1
 
     if @course.save
-      flash[:success] = 'Course was successfully added.'
+      flash[:success] = "#{@course.number} was successfully added."
       redirect_to get_course_repo_path
     else
       render :get_course_repo
@@ -191,28 +214,6 @@ class CoursesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
       params.require(:course).permit(:number, :section, :name, :size, :day, :time, :year, :semester, :room_id, :user_id)
-    end
-    
-    def room_availability(room)
-      if (room.available_time==nil || room.id==1)
-        return nil
-      end
-      if room.available_time.empty?
-        return nil
-      end
-      ra = parse_available_time(room.available_time)
-      @courses = set_courses
-      @courses.each do |course|
-        ct = course.time
-        if(course.room_id==room.id)
-          if ct!=nil
-            if !ct.empty?
-              ra = subtract_time_group(ra,parse_available_time(ct))
-            end
-          end
-        end
-      end
-      return ra
     end
     
     def render_edit

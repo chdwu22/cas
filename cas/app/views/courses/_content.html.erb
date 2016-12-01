@@ -10,8 +10,10 @@
     <% else %> 
       <td> 
     <% end %>
-      
-    <% @assigned_courses << course %>
+    
+    <% if room.id != 1 %>  
+      <% @assigned_courses << course %>
+    <% end %>
     <%= link_to course.number, edit_course_path(course) %> 
     <% if course.user_id!=1 %>
       <%= course.user.full_name %>

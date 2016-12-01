@@ -102,7 +102,7 @@ class UsersController < ApplicationController
         redirect_to users_path
       end
     else
-      flash[:danger] = "Failed to add faculty."
+      flash.now[:danger] = "Failed to add faculty."
       render :edit
     end
   end
@@ -118,7 +118,7 @@ class UsersController < ApplicationController
       end
     end
     @user.destroy
-    flash[:success] = 'User was successfully deleted.'
+    flash[:success] = "#{@user.full_name}  was successfully deleted."
     redirect_to users_url
   end
   

@@ -2,6 +2,8 @@ class SystemvariablesController < ApplicationController
   before_action :require_admin
   
   def get_current_semester
+    @year = Systemvariable.find_by(:name =>"scheduling_year")
+    @semester = Systemvariable.find_by(:name =>"scheduling_semester")
   end
   
   def set_current_semester

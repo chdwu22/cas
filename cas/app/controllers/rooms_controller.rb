@@ -70,6 +70,7 @@ class RoomsController < ApplicationController
         render :edit 
       end
     else
+      flash.now[:danger] = 'Available time is empty.'
       render :edit 
     end
   end

@@ -8,7 +8,6 @@
           <th>Number</th>
           <th>Name</th>
           <th>Semester</th>
-          <th>Size</th>
           <th>Delete</th>
         </tr>
       </thead>
@@ -20,8 +19,7 @@
               <td><%= course.number %></td>
               <td><%= course.name %></td>
               <td><%= course.year %> <%= course.semester %></td>
-              <td><%= course.size %></td>
-              <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-default' %></td>
+              <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-danger' %></td>
             </tr>
           <% end %>
         <% end %>

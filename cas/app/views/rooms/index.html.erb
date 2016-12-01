@@ -21,8 +21,8 @@
             <td><%= room.number %></td>
             <td><%= room.capacity %></td>
             <td><%= room.available_time %></td>
-            <td><%= link_to 'Edit', edit_room_path(room) %></td>
-            <td><%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Edit', edit_room_path(room), class:'btn btn-sm btn-default'  %></td>
+            <td><%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-default' %></td>
             </tr>
           <% end %>
         <% end %>
@@ -33,6 +33,5 @@
 
 <br>
 
-<%= link_to 'New Room', new_room_path %>
+<%= link_to 'New Room', new_room_path, class:'btn btn-default' %>
 
-<%= debug(params) if Rails.env.development? %>

@@ -51,7 +51,7 @@
             <tr>
               <td><%= course.number %></td>
               <td><%= course.name %></td>
-              <td><%= link_to 'Delete', delete_course_repo_path(:id=>course.id), data: { confirm: 'Are you sure?' } %></td>
+              <td><%= link_to 'Delete', delete_course_repo_path(:id=>course.id), data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-default' %></td>
             </tr>
           <% end %>
         <% end %>

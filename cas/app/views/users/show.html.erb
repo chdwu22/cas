@@ -39,8 +39,8 @@
   <div class="col-xs-7 col-xs-offset-1">
     <h4>Preferences:</h4>
     <b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable <br>
-    Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b> <br>
     Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b> <br>
+    Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b> <br>
     <table class="table table-striped">
       <% if @user_pref.empty? %>
         <tr>

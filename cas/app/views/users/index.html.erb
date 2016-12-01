@@ -18,11 +18,11 @@
             <td><%= user.last_name %></td>
             <td><%= 'Yes' if user.is_admin%></td>
             <td><%= user.email %></td>
-            <td><%= link_to 'Show', user %></td>
-            <td><%= link_to 'Reset password', edit_user_path(user) %></td>
+            <td><%= link_to 'Show', user, class:'btn btn-sm btn-default'  %></td>
+            <td><%= link_to 'Reset password', edit_user_path(user), class:'btn btn-sm btn-default'  %></td>
             <% if current_user.id != user.id && user.id != 1 %>
-              <td><%= link_to 'Change role', change_role_path(:id => user.id) %></td>
-              <td><%= link_to 'Delete', user, method: :delete, data: { confirm: "Are you sure to delete #{user.full_name}?" } %></td>
+              <td><%= link_to 'Change role', change_role_path(:id => user.id), class:'btn btn-sm btn-default'  %></td>
+              <td><%= link_to 'Delete', user, method: :delete, data: { confirm: "Are you sure to delete #{user.full_name}?" }, class:'btn btn-sm btn-default'  %></td>
             <% else %>
               <td></td><td></td>
             <% end %>
@@ -35,6 +35,6 @@
 
 <br>
 
-<%= link_to 'Add faculty', new_user_path %>
+<%= link_to 'Add faculty', new_user_path, class: 'btn btn-default' %>
 
 <%= debug(params) if Rails.env.development? %>

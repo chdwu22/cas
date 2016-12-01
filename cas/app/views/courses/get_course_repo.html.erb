@@ -21,7 +21,7 @@
               <td><%= course.name %></td>
               <td><%= course.year %> <%= course.semester %></td>
               <td><%= course.size %></td>
-              <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-default' %></td>
             </tr>
           <% end %>
         <% end %>
@@ -51,7 +51,7 @@
             <tr>
               <td><%= course.number %></td>
               <td><%= course.name %></td>
-              <td><%= link_to 'Add', add_to_current_courses_path(:id=>course.id) %></td>
+              <td><%= link_to 'Add', add_to_current_courses_path(:id=>course.id), class:'btn btn-sm btn-default' %></td>
             </tr>
           <% end %>
         <% end %>

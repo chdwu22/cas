@@ -111,6 +111,9 @@ class CoursesController < ApplicationController
   end
   
   def faculty_time_overlap?
+    if @course.user.id==1
+      return false
+    end
     faculty_courses = @course.user.courses
     faculty_courses.each do |fc|
       f_time = fc.time.split('-')

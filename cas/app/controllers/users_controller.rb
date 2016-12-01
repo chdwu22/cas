@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.all.order(:last_name)
   end
 
   # GET /users/1
@@ -125,7 +125,7 @@ class UsersController < ApplicationController
   def destroy
     @courses = Course.all
     @courses.each do |course|
-      if(course.user_id = @user.id)
+      if(course.user_id == @user.id)
         course.user_id = 1
         course.save
       end

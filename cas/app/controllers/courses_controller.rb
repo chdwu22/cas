@@ -90,11 +90,11 @@ class CoursesController < ApplicationController
       return true
     end
     if @room.available_time==nil
-      flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+      flash[:danger] = "Available time for #{@room.number} is not set"
       return false
     else
       if @room.available_time.empty?
-        flash[:danger] = "Available time for #{@room.building.name} #{@room.number} is not set"
+        flash[:danger] = "Available time for #{@room.number} is not set"
         return false
       end
     end

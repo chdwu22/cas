@@ -95,7 +95,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       @user.full_name = @user.first_name + " " + @user.last_name
       @user.update(user_params)
-      if !@user.is_admin
+      if !current_user.is_admin
         redirect_to user_path(@user)
       else
       flash[:success] = "#{@user.full_name} was successfully updated."

@@ -1,10 +1,10 @@
 <h4>Copy courses from previous semesters semester</h4>
 
 <div class='row'>
-  <div class="col-xs-9">
+  <div class="col-sm-6">
     <%= form_tag("/copy_courses", method: "get") do %>
       <div class="field">
-        <%= number_field_tag(:previous_year, @year.value.to_i - 1, :style => "float:left;") %>
+        <%= number_field_tag(:previous_year, @year.value.to_i, :style => "float:left;") %>
         <%= select_tag :previous_semester, options_for_select(@semester), :style => "float:left;" %>
         <%= submit_tag "Copy", data: { confirm: "Are you sure to copy all the courses?" }, class:'btn btn-sm btn-default', :style => "float:left;" %>
       </div>
@@ -15,14 +15,14 @@
 
 <h4>Courses for current semester</h4>
 <div class='row'>
-  <div class="col-xs-9">
+  <div class="col-sm-6">
     <table class="table table-hover">
       <thead>
         <tr>
           <th>Number</th>
           <th>Name</th>
           <th>Semester</th>
-          <th><%= link_to 'Delete All', delete_all_courses_path, data: { confirm: "Are you sure to delete all classes?" }, class:'btn btn-small btn-danger' %></th>
+          <th colspan="2"><%= link_to 'Delete All', delete_all_courses_path, data: { confirm: "Are you sure to delete all classes?" }, class:'btn btn-small btn-danger' %></th>
         </tr>
       </thead>
     
@@ -33,6 +33,7 @@
               <td><%= course.number %></td>
               <td><%= course.name %></td>
               <td><%= course.year %> <%= course.semester %></td>
+              <td><%= link_to 'Add', add_to_current_courses_path(:id=>course.id), class:'btn btn-sm btn-default' %></td>
               <td><%= link_to 'Delete', course, method: :delete, data: { confirm: "Are you sure to delete #{course.number}?" }, class:'btn btn-sm btn-default' %></td>
             </tr>
           <% end %>
@@ -47,7 +48,7 @@
 <h4>Course repository</h4>
 
 <div class='row'>
-  <div class="col-xs-9">
+  <div class="col-sm-6">
     <table class="table table-hover">
       <thead>
         <tr>

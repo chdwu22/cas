@@ -27,7 +27,7 @@ class PagesController < ApplicationController
   
   def get_data
     @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
-    @rooms = Room.all.order(:capacity)
+    @rooms = Room.all.order(:number)
     @users = User.all
     @MWF= Timeslot.where("day=?","MWF").order(:from_time)
     @MW= Timeslot.where("day=?","MW").order(:from_time)

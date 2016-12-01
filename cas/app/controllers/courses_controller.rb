@@ -252,7 +252,7 @@ class CoursesController < ApplicationController
     
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)
-      @rooms = Room.where("capacity >= ?", @course.size).order(:capacity)
+      @rooms = Room.where("capacity >= ?", @course.size).order(:number)
       @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
       @buildings = Building.pluck(:name, :id)

@@ -18,7 +18,9 @@
                 <td><%= user.last_name %></td>
                 <td>
                   <% user.courses.each do |course| %>
-                    <%= course.number %> | 
+                    <% if course.year == current_year.to_i && course.semester==current_semester %>
+                      <%= course.number %> | 
+                    <% end %>
                   <% end %>
                 </td>
               </tr>

@@ -255,7 +255,6 @@ class CoursesController < ApplicationController
       @rooms = Room.where("capacity >= ?", @course.size).order(:number)
       @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
-      @buildings = Building.pluck(:name, :id)
       timeslots = Timeslot.all
       @MWF= Timeslot.where("day=?","MWF").order(:from_time)
       @MW= Timeslot.where("day=?","MW").order(:from_time)

@@ -1,7 +1,6 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy]
   before_action :require_admin
-  before_action :set_buildings, only: [:new, :edit, :create, :update]
 
   # GET /rooms
   # GET /rooms.json
@@ -98,11 +97,6 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:number, :capacity, :building_id, :available_time)
-    end
-    
-    def set_buildings
-      @buildings = Building.pluck(:name, :id)
-      @buildings.delete_at(0)
+      params.require(:room).permit(:number, :capacity, :available_time)
     end
 end

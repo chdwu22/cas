@@ -60,6 +60,8 @@ class UsersController < ApplicationController
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
     @preferred_time_slot_limit =  Systemvariable.find_by(:name=>"preferred_time_slot_limit")
     @user_pref = TimeslotUser.where("user_id=?", @user.id).includes(:timeslot)
+    @timeslots = Timeslot.all.order(:day, :from_time)
+    
     @MWF= Timeslot.where("day=?","MWF").order(:from_time)
     @MW= Timeslot.where("day=?","MW").order(:from_time)
     @TR= Timeslot.where("day=?","TR").order(:from_time)

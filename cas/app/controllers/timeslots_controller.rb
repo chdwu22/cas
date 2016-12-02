@@ -103,6 +103,10 @@ class TimeslotsController < ApplicationController
     Timeslot.create(:day=>"TR", :from_time=>1555, :to_time=>1710)
     Timeslot.create(:day=>"TR", :from_time=>1730, :to_time=>1845)
     Timeslot.create(:day=>"TR", :from_time=>1920, :to_time=>2035)
+    Timeslot.create(:day=>"M", :from_time=>1745, :to_time=>2015)
+    Timeslot.create(:day=>"T", :from_time=>1730, :to_time=>2000)
+    Timeslot.create(:day=>"W", :from_time=>1745, :to_time=>2015)
+    Timeslot.create(:day=>"R", :from_time=>1730, :to_time=>2000)
     redirect_to root_path
   end
 

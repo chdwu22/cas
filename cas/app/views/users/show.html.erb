@@ -14,20 +14,22 @@
       <th>Room</th>
       <th>Time</th>
       <% @courses.each do |course| %>
-        <tr>
-          <td><%= course.number %></td>
-          <td><%= course.name %></td>
-          <td><%= course.section %></td>
-          <td><%= course.size %></td>
-          <td><%= course.room.number %></td>
-          <td>
-            <% if course.time!=nil %> 
-              <% if !course.time.empty? %>
-                <%= day_time_display(course.time) %>
+        <% if course.year == current_year.to_i && course.semester==current_semester %>
+          <tr>
+            <td><%= course.number %></td>
+            <td><%= course.name %></td>
+            <td><%= course.section %></td>
+            <td><%= course.size %></td>
+            <td><%= course.room.number %></td>
+            <td>
+              <% if course.time!=nil %> 
+                <% if !course.time.empty? %>
+                  <%= day_time_display(course.time) %>
+                <% end %>
               <% end %>
-            <% end %>
-          </td>
-        </tr>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     </table>
   <% end %>

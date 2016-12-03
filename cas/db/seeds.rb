@@ -18,7 +18,7 @@ variables.each do |v|
 end
 
 
-User.create!({:first_name => 'Super', :last_name => 'Admin', :full_name=>'Admin, Super',:is_admin=>true, :email=>'admin@tamu.edu', :password=>"asdf"})
+User.create!({:first_name => 'Super', :last_name => 'Admin', :full_name=>'Admin, Super',:is_admin=>true, :email=>'admin@tamu.edu', :password=>"asdfa"})
 Room.create!({:number => 'N/A', :capacity=>1000})
 
 timeslots = [{:day=>"MWF", :from_time=>800, :to_time=>850},

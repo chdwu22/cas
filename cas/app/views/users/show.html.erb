@@ -67,7 +67,7 @@
         <% end %>
     </table>
     <% if @faculty_permission.value=="yes" %>
-      <%= submit_tag("Update preferences", class: 'btn btn-default' )%>
+      <%= submit_tag("Update preferences", class: 'btn btn-primary' )%>
     <% else %>
       <%= submit_tag("View Only", disabled: true, class: 'btn btn-default' )%> 
     <% end %>

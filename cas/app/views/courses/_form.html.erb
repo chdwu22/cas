@@ -33,7 +33,7 @@
   
   <div class="field">
     <%= f.label :time%>
-    <%= f.select :time, options_for_select(@timeslots, course.time) %>
+    <%= f.select :time, options_for_select(@stringtimeslots, course.time) %>
   </div>
 
   <div class="actions">

@@ -102,13 +102,12 @@ class CoursesController < ApplicationController
     #room_available_time = parse_available_time(@room.available_time)
     room_available_time = room_availability(@room)
     
-    r = false
     room_available_time.each do |t|
       if include_time?(t, course_time[0])
-        r = true
+        return true
       end
     end
-    return r
+    return false
   end
   
   def faculty_time_overlap?
@@ -255,18 +254,20 @@ class CoursesController < ApplicationController
       @rooms = Room.where("capacity >= ?", @course.size).order(:number)
       @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
-      timeslots = Timeslot.all
-      @MWF= Timeslot.where("day=?","MWF").order(:from_time)
-      @MW= Timeslot.where("day=?","MW").order(:from_time)
-      @TR= Timeslot.where("day=?","TR").order(:from_time)
-      @days = Systemvariable.where("name=?","day")
-      @times = Systemvariable.where("name=?", "time")
+      @timeslots = Timeslot.all
+      @days = Timeslot.pluck(:day).uniq
+      #@MWF= Timeslot.where("day=?","MWF").order(:from_time)
+      #@MW= Timeslot.where("day=?","MW").order(:from_time)
+      #@TR= Timeslot.where("day=?","TR").order(:from_time)
+      #@days = Systemvariable.where("name=?","day")
+      #@times = Systemvariable.where("name=?", "time")
       @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
       @assigned_courses=[]
-      @timeslots = []
-      timeslots.each do |ts|
+      
+      @stringtimeslots = []
+      @timeslots.each do |ts|
         str = ts.day + "-" + ts.from_time.to_s + "-" + ts.to_time.to_s
-        @timeslots << str
+        @stringtimeslots << str
       end
     end
     

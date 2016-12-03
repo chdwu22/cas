@@ -29,9 +29,10 @@ class PagesController < ApplicationController
     @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
     @rooms = Room.all.order(:number)
     @users = User.all
-    @MWF= Timeslot.where("day=?","MWF").order(:from_time)
-    @MW= Timeslot.where("day=?","MW").order(:from_time)
-    @TR= Timeslot.where("day=?","TR").order(:from_time)
+    @timeslots = Timeslot.all
+    # @MWF= Timeslot.where("day=?","MWF").order(:from_time)
+    # @MW= Timeslot.where("day=?","MW").order(:from_time)
+    # @TR= Timeslot.where("day=?","TR").order(:from_time)
     @assigned_courses=[]
   end
   

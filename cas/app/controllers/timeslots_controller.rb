@@ -61,29 +61,30 @@ class TimeslotsController < ApplicationController
     end
   end
   
-  def new_time_table
-    clear_records
-    @days = Systemvariable.where("name=?", "day")
-    @times = Systemvariable.where("name=?", "time")
-    #@days = Systemvariable.where(:name =>"day")
-    #@times = Systemvariable.where(:name =>"time")
-    @days.each do |day|
-      @times.each do |time|
-        ts = time.value.split('-')
-        ft = ts[0].to_i
-        tt = ts[1].to_i
-        @timeslot = Timeslot.new(:day=>day.value, :from_time=>ft, :to_time=>tt)
-        @timeslot.save
-      end
-    end
-    flash[:success] = "New time table has been generated."
-    redirect_to root_path
-  end
+  ##for creating general time slots, not for A&M
+  # def new_time_table
+  #   clear_records
+  #   @days = Systemvariable.where("name=?", "day")
+  #   @times = Systemvariable.where("name=?", "time")
+  #   #@days = Systemvariable.where(:name =>"day")
+  #   #@times = Systemvariable.where(:name =>"time")
+  #   @days.each do |day|
+  #     @times.each do |time|
+  #       ts = time.value.split('-')
+  #       ft = ts[0].to_i
+  #       tt = ts[1].to_i
+  #       @timeslot = Timeslot.new(:day=>day.value, :from_time=>ft, :to_time=>tt)
+  #       @timeslot.save
+  #     end
+  #   end
+  #   flash[:success] = "New time table has been generated."
+  #   redirect_to root_path
+  # end
   
-  def show_time_table
-    @days = Timeslot.pluck(:day).uniq
-    @times = Timeslot.pluck(:from_time, :to_time).uniq
-  end
+  # def show_time_table
+  #   @days = Timeslot.pluck(:day).uniq
+  #   @times = Timeslot.pluck(:from_time, :to_time).uniq
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.

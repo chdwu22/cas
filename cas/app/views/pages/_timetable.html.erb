@@ -11,24 +11,10 @@
       </thead>
     
       <tbody>
-        <% @MWF.each do |mwf| %>
+        <% @timeslots.each do |ts| %>
           <tr>
-            <td>MWF <%= format_time(mwf.from_time.to_s+"-"+mwf.to_time.to_s) %></td>
-            <%= render 'content', mtwrf: mwf %>
-          </tr>
-        <% end %>
-        <tr><td bgcolor="#cccccc"></td></tr>
-        <% @MW.each do |mw| %>
-          <tr>
-            <td>MW <%= format_time(mw.from_time.to_s+"-"+mw.to_time.to_s) %></td>
-            <%= render 'content', mtwrf: mw  %>
-          </tr>
-        <% end %>
-        <tr><td bgcolor="#cccccc"></td></tr>
-        <% @TR.each do |tr| %>
-          <tr>
-            <td>TR <%= format_time(tr.from_time.to_s+"-"+tr.to_time.to_s) %></td>
-            <%= render 'content', mtwrf: tr  %>
+            <td><%= ts.day %> <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %></td>
+            <%= render 'content', mtwrf: ts %>
           </tr>
         <% end %>
       </tbody>

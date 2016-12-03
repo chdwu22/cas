@@ -63,12 +63,6 @@ class UsersController < ApplicationController
     @timeslots = Timeslot.all
     @days = Timeslot.pluck(:day).uniq
     @courses = @user.courses
-    
-    
-    @MWF= Timeslot.where("day=?","MWF").order(:from_time)
-    @MW= Timeslot.where("day=?","MW").order(:from_time)
-    @TR= Timeslot.where("day=?","TR").order(:from_time)
-    
   end
 
   # GET /users/new

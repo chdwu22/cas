@@ -1,0 +1,29 @@
+<!-- faculty preference  -->
+<tr>
+  <td>
+    <% if @course.user_id!=1 %>
+      <h4><%= @course.user.full_name %> preference</h4>
+      <div class='row'>
+        <div class="col-xs-9">
+          <table class="table table-striped">
+            <% @days.each do |day| %>
+              <tr>
+                <td><b><%= day %></b></td>
+                <% @timeslots.each do |ts| %>
+                  <% if day == ts.day %>
+                    <% option = get_option(ts) %>
+                    <% if option[0]==1 %>
+                      <td  bgcolor="#CCFFCC"> <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %> </td>
+                    <%elsif option[0] == 3%> 
+                      <td  bgcolor="#FFCCCC"> <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %> </td>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+        </table>
+        </div>
+      </div>
+    <% end %>
+  </td>
+</tr>

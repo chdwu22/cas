@@ -3,7 +3,8 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_user, :logged_in?, :current_year, :current_semester, 
                 :format_time, :format_day_time, :day_time_display, 
-                :get_preference, :get_course, :get_unassigned_courses, :get_availability
+                :get_preference, :get_course, :get_unassigned_courses, :get_availability,
+                :get_faculty_preference
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -364,15 +365,25 @@ class ApplicationController < ActionController::Base
               return p.preference_type
             end
           end
-        else
-          return 2
         end
-      else
-        return 2
       end
-    else
-      return 2
     end
+    return 2
+  end
+  
+  def get_faculty_preference(mtwrf)
+    user = User.find(@course.user_id)
+    if user.id != 1
+      pref = TimeslotUser.where("user_id=?",user.id).includes(:timeslot)
+      if pref != nil
+        pref.each do |p|
+          if (p.timeslot.day == mtwrf.day && p.timeslot.from_time == mtwrf.from_time)
+            return p.preference_type
+          end
+        end
+      end
+    end
+    return 2
   end
   
   def get_unassigned_courses

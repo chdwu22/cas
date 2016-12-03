@@ -208,16 +208,8 @@ class CoursesController < ApplicationController
   end
   
   def add_to_current_courses
-    #@current_courses = set_courses
     @course_repo = Course.where("year=?",0).order(:number)
     origin_course = Course.find(params[:id])
-    # @current_courses.each do |cc|
-    #   if cc.number == origin_course.number
-    #     flash.now[:danger] = "#{origin_course.number} was already added"
-    #     render :get_course_repo
-    #     return
-    #   end
-    # end
     
     @course = Course.new
     @course.number = origin_course.number
@@ -244,7 +236,6 @@ class CoursesController < ApplicationController
     
     def set_courses
       @courses = Course.where(year: current_year, semester: current_semester ).order(:number)
-      #@courses = Course.where(:conditions=>["year=? and semester=?", current_year, current_semester])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -259,11 +250,6 @@ class CoursesController < ApplicationController
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
       @timeslots = Timeslot.all
       @days = Timeslot.pluck(:day).uniq
-      #@MWF= Timeslot.where("day=?","MWF").order(:from_time)
-      #@MW= Timeslot.where("day=?","MW").order(:from_time)
-      #@TR= Timeslot.where("day=?","TR").order(:from_time)
-      #@days = Systemvariable.where("name=?","day")
-      #@times = Systemvariable.where("name=?", "time")
       @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
       @assigned_courses=[]
       

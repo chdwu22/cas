@@ -60,12 +60,15 @@ class UsersController < ApplicationController
     @unacceptable_time_slot_limit = Systemvariable.find_by(:name=>"unacceptable_time_slot_limit")
     @preferred_time_slot_limit =  Systemvariable.find_by(:name=>"preferred_time_slot_limit")
     @user_pref = TimeslotUser.where("user_id=?", @user.id).includes(:timeslot)
-    @timeslots = Timeslot.all.order(:day, :from_time)
+    @timeslots = Timeslot.all
+    @days = Timeslot.pluck(:day).uniq
+    @courses = @user.courses
+    
     
     @MWF= Timeslot.where("day=?","MWF").order(:from_time)
     @MW= Timeslot.where("day=?","MW").order(:from_time)
     @TR= Timeslot.where("day=?","TR").order(:from_time)
-    @courses = @user.courses
+    
   end
 
   # GET /users/new
@@ -83,7 +86,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.full_name = @user.last_name + ", " + @user.first_name
     if @user.save
-      #session[:user_id] = @user.id
+      create_preferences
       flash[:success] = 'Faculty successfully added.'
       redirect_to users_path
     else
@@ -174,6 +177,15 @@ class UsersController < ApplicationController
       if current_user != @user and !current_user.is_admin?
         flash[:danger] = "You have no permission to visit this page."
         redirect_to root_path
+      end
+    end
+    
+    def create_preferences
+      #default preferences
+      timeslots =Timeslot.all
+      timeslots.each do |ts|
+        pt = (ts.from_time>=1700) ? 3 : 2
+        TimeslotUser.create(:user_id=>@user.id, :timeslot_id=>ts.id, :preference_type=>pt)
       end
     end
 end

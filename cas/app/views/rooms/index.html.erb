@@ -1,6 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Rooms</h1>
+<div>
+  <%= link_to 'Add Room', new_room_path, class:'btn btn-default' %>
+</div><br>
 
 <div class='row'>
   <div class="col-xs-6">
@@ -30,8 +32,3 @@
     </table>
   </div>
 </div>
-
-<br>
-
-<%= link_to 'New Room', new_room_path, class:'btn btn-default' %>
-

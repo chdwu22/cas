@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-sm-6">
+    <% if @courses_no_room.count >0 %>
+    <h4> Need room for:</h4>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>Size</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @courses_no_room.each do |c| %>
+            <tr>
+              <td> <%= c.number %> </td>
+              <td> <%= c.size %> </td>
+              <td> <%= c.name %> </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+<br><br>
+
+<div class="row">
+  <div class="col-sm-6">
+    <% if @courses_size_not_set.count >0 %>
+      <h4> Not checked for:</h4>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>Size</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @courses_size_not_set.each do |c| %>
+            <tr>
+              <td> <%= link_to c.number, edit_course_path(c) %> </td>
+              <td> <%= c.size %> </td>
+              <td> <%= c.name %> </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

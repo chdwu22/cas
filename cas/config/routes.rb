@@ -48,4 +48,5 @@ Rails.application.routes.draw do
   get 'copy_courses', to: 'courses#copy_courses'
   get 'delete_course_repo', to:'courses#delete_course_repo'
   get 'delete_all_courses', to:'courses#delete_all_courses'
+  get 'enough_rooms', to:'courses#enough_rooms'
 end

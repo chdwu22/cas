@@ -227,6 +227,80 @@ class CoursesController < ApplicationController
       render :get_course_repo
     end
   end
+  
+  def enough_rooms
+    @rooms = Room.all.order(capacity: :desc)
+    @courses = Course.where(year: current_year, semester: current_semester ).order(:size=> :desc)
+    @timeslots = Timeslot.all
+    room_timeslots = []  #[100,100,100,50,50,50,50,30] means that there are 
+                          # three timelots with room capacity of 100, and so on.
+                          # In descent order of capacity.
+    @rooms.each do |room|
+      mw = [0,0]
+      tr = [0,0]
+      if room.id ==1
+        next
+      end
+      rats = room.available_time
+      arr_rat = parse_available_time(rats)
+      arr_rat.each do |rt|
+        @timeslots.each do |ts|
+          arr_ts = []
+          arr_ts << ts.day.scan( /\w/) << ts.from_time << ts.to_time
+          if include_time?(rt, arr_ts)
+            if ts.from_time < 1700
+              room_timeslots << room.capacity
+            else
+              if ts.day == "MW"
+                mw[0] += 1
+              elsif ts.day =="M" || ts.day=="W"
+                mw[1] += 1
+              elsif ts.day =="TR"
+                tr[0] += 1
+              elsif ts.day == "T" || ts.day == "R"
+                tr[1] += 1
+              end
+            end
+          end
+        end
+        max_mw = (mw[0] > mw[1]) ? mw[0] : mw[1]
+        max_tr = (tr[0] > tr[1]) ? tr[0] : tr[1]
+        for i in 1..max_mw
+          room_timeslots << room.capacity
+        end
+        for i in 1..max_tr
+          room_timeslots << room.capacity
+        end
+      end
+    end
+    
+    @courses_no_room = []
+    @courses_size_not_set = []
+    @courses.each do |course|
+      if course.size == 0
+        @courses_size_not_set << course
+        next
+      end
+      if course.size <= room_timeslots[0]
+        room_timeslots.delete_at(0)
+        next
+      else
+        @courses_no_room << course
+      end
+    end
+    
+    if @courses_no_room.empty? && @courses_size_not_set.empty?
+      flash[:success] = "Rooms are enough."
+      redirect_to courses_path
+    elsif !@courses_no_room.empty?
+      flash.now[:danger] = "NOT enough rooms."
+    elsif @courses_size_not_set.count > room_timeslots.count
+      shortage = @courses_size_not_set.count + @courses_no_room.count - room_timeslots.count
+      flash.now[:danger] = "NOT enough rooms. Needs at least #{shortage} more time slots"
+    else
+      flash.now[:success] = "Rooms might be enough."
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -188,27 +188,29 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  #return true if time2 is included in time1. [["T","R"],800,1000] includes [["T"],800,900]
+  #return true if time2 is included in time1. [["T","R"],800,1000] includes [["T"],800,900]. [["T","R"],800,1000] includes [["T","R"],800,900]
   def include_time?(time1, time2)
     t1 = to_int_time(time1)
     t2 = to_int_time(time2)
-    
+
     i=0
     while i < t2.count  do
       short_st = t2[i]
       short_et = t2[i+1]
       j=0
+      unit_result=false
       while j < t1.count  do
         long_st = t1[j]
         long_et = t1[j+1]
         if(short_st >= long_st && short_et <= long_et)
-          return true
+          unit_result = true
         end
         j +=2
       end
       i +=2
+      return false if !unit_result
     end
-    return false
+    return true
   end
   
   ##############################################################################

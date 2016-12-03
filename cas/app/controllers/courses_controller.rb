@@ -101,7 +101,6 @@ class CoursesController < ApplicationController
     end
     #room_available_time = parse_available_time(@room.available_time)
     room_available_time = room_availability(@room)
-    
     room_available_time.each do |t|
       if include_time?(t, course_time[0])
         return true

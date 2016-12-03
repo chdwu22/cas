@@ -33,6 +33,7 @@ describe ApplicationController do
       expect(subject.include_time?([["T","R"],800,900], [["F"],800,900])).to eq(false)
       expect(subject.include_time?([["T","R"],800,900], [["T"],800,910])).to eq(false)
       expect(subject.include_time?([["M","W","F"],800,2100], [["M","W","F"],800,850])).to eq(true)
+      expect(subject.include_time?([["M", "W", "R", "F"], 800, 2100], [["T", "R"], 1920, 2035])).to eq(false)
     end
   end
   

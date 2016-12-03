@@ -67,19 +67,23 @@ class CoursesController < ApplicationController
           redirect_to edit_course_path(@course)
         else
           render :edit 
+          return
         end
       else
         if !radct
           flash.now[:danger] = "#{@room.number} is not available during this class time"
           render :edit
+          return
         end
         if fto
           flash.now[:danger] = "#{user.full_name} has another class scheduled at this time"
           render :edit
+          return
         end
       end
     else
       render :edit 
+      return
     end
   end
   

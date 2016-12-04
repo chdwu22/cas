@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_role, :get_option]
   before_action :require_same_user, only: [:show, :edit, :update]
-  before_action :require_admin, only:[:index, :destroy]
+  before_action :require_admin, except:[:show, :edit,:update]
   helper_method :get_option
   
   # GET /users

@@ -40,7 +40,7 @@
                           <td><%= room.number %></td>
                           <td><%= room.capacity %></td>
                           <td>
-                            <% ra = room_availability(room) %>
+                            <% ra = room_availability(room, @courses, @course) %>
                             <% if ra!=nil %>
                               <%= format_day_time(ra)%>
                             <% end %>

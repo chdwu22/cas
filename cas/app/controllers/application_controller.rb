@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
   
   ##############################################################################
-  #parse string "MW-800-1000, T-900-1500" to an array of daytime [[["M","W"],800,1000],["T"],900,1500]
+  #parse string "MW-800-1000, T-900-1500" to an array of daytime [[["M","W"],800,1000],[["T"],900,1500]]
   def parse_available_time(input_str)
     times = []
     begin
@@ -403,6 +403,12 @@ class ApplicationController < ActionController::Base
       end
     end
     return false
+  end
+  
+  def timeslot_to_array_time(ts)
+    arr_ts = []
+    arr_ts << ts.day.scan( /\w/) << ts.from_time << ts.to_time
+    return arr_ts
   end
   
   

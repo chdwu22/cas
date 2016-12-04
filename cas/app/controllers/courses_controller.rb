@@ -1,18 +1,20 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy, :schedule_course]
   before_action :require_admin
-  before_action :set_courses, only: [:index, :assign_room, :set_course_time, :delete_all_courses]
+  before_action :set_courses, only: [:index, :update, :assign_room, :set_course_time, :delete_all_courses, :auto_schedule]
   before_action :render_edit, only: [:edit, :update]
   
   helper_method :room_availability, :get_option
 
   # GET /courses
   # GET /courses.json
+  #############################################################################
   def index
   end
 
   # GET /courses/1
   # GET /courses/1.json
+  #############################################################################
   def show
     if (@course.time!=nil)
       if(!@course.time.strip.empty?)
@@ -22,17 +24,20 @@ class CoursesController < ApplicationController
   end
 
   # GET /courses/new
+  #############################################################################
   def new
     @course = Course.new
     @course_repo = Course.where("year=?",0).order(:number)
   end
 
   # GET /courses/1/edit
+  #############################################################################
   def edit
   end
 
   # POST /courses
   # POST /courses.json
+  #############################################################################
   def create
     @course = Course.new(course_params)
     @course.year = 0
@@ -49,6 +54,7 @@ class CoursesController < ApplicationController
 
   # PATCH/PUT /courses/1
   # PATCH/PUT /courses/1.json
+  #############################################################################
   def update
     #check if user entered time is legit format
     if (course_params[:time]!=nil)
@@ -59,7 +65,13 @@ class CoursesController < ApplicationController
     
     user = User.find(course_params[:user_id])
     if(@timelines!=nil)
-      radct = room_available_during_course_time?
+      room = Room.find(course_params[:room_id])
+      if room.capacity < course_params[:size].to_i
+        flash.now[:danger] = "Course size is set to greater than the room capacity."
+        render :edit
+        return
+      end
+      radct = room_available_during_course_time?(room, course_params[:time], @courses, @course)
       fto = faculty_time_overlap?
       if(radct && !fto)
         if @course.update(course_params)
@@ -71,7 +83,7 @@ class CoursesController < ApplicationController
         end
       else
         if !radct
-          flash.now[:danger] = "#{@room.number} is not available during this class time"
+          flash.now[:danger] = "#{room.number} is not available during this class time"
           render :edit
           return
         end
@@ -87,32 +99,33 @@ class CoursesController < ApplicationController
     end
   end
   
-  def room_available_during_course_time?
-    course_time = parse_available_time(course_params[:time])
-    @room = Room.find(course_params[:room_id])
+  #############################################################################
+  def room_available_during_course_time?(room, new_course_time, courses, current_course)
+    ct = parse_available_time(new_course_time)
     
-    if @room.id==1
+    if room.id==1
       return true
     end
-    if @room.available_time==nil
-      flash[:danger] = "Available time for #{@room.number} is not set"
+    if room.available_time==nil
+      flash[:danger] = "Available time for #{room.number} is not set"
       return false
     else
-      if @room.available_time.empty?
-        flash[:danger] = "Available time for #{@room.number} is not set"
+      if room.available_time.empty?
+        flash[:danger] = "Available time for #{room.number} is not set"
         return false
       end
     end
-    #room_available_time = parse_available_time(@room.available_time)
-    room_available_time = room_availability(@room)
+    #room_available_time = parse_available_time(room.available_time)
+    room_available_time = room_availability(room, courses, current_course)
     room_available_time.each do |t|
-      if include_time?(t, course_time[0])
+      if include_time?(t, ct[0])
         return true
       end
     end
     return false
   end
   
+  #############################################################################
   def faculty_time_overlap?
     user_id = course_params[:user_id].to_i
     user = User.find(user_id)
@@ -132,8 +145,8 @@ class CoursesController < ApplicationController
     return false
   end
   
-  
-  def room_availability(room)
+  #############################################################################
+  def room_availability(room, courses, current_course)
     if (room.available_time==nil || room.id==1)
       return nil
     end
@@ -141,10 +154,9 @@ class CoursesController < ApplicationController
       return nil
     end
     ra = parse_available_time(room.available_time)
-    @courses = set_courses
-    @courses.each do |course|
+    courses.each do |course|
       ct = course.time
-      if(course.room_id==room.id && course.id!=@course.id)
+      if(course.room_id==room.id && course.id!=current_course.id)
         if ct!=nil
           if !ct.empty?
             ra = subtract_time_group(ra,parse_available_time(ct))
@@ -154,7 +166,8 @@ class CoursesController < ApplicationController
     end
     return ra
   end
-    
+  
+  #############################################################################  
   def copy_courses
     previous_year = params[:previous_year]
     previous_semester = params[:previous_semester]
@@ -179,12 +192,14 @@ class CoursesController < ApplicationController
   
   # DELETE /courses/1
   # DELETE /courses/1.json
+  #############################################################################
   def destroy
     @course.destroy
     flash[:success] = "#{@course.number} was successfully deleted."
     redirect_to :back
   end
   
+  #############################################################################
   def delete_course_repo
     @course = Course.find(params[:id])
     @course.destroy
@@ -192,6 +207,7 @@ class CoursesController < ApplicationController
     redirect_to new_course_path
   end
   
+  #############################################################################
   def delete_all_courses
     @courses.each do |course|
       course.destroy
@@ -200,6 +216,7 @@ class CoursesController < ApplicationController
     redirect_to get_course_repo_path
   end
   
+  #############################################################################
   def get_course_repo
     @course_repo = Course.where("year=?",0).order(:number)
     @current_courses = set_courses
@@ -207,6 +224,7 @@ class CoursesController < ApplicationController
     @semester = Course.where.not(:year=>0).pluck(:semester).uniq
   end
   
+  #############################################################################
   def add_to_current_courses
     @course_repo = Course.where("year=?",0).order(:number)
     origin_course = Course.find(params[:id])
@@ -228,6 +246,7 @@ class CoursesController < ApplicationController
     end
   end
   
+  #############################################################################
   def enough_rooms
     @rooms = Room.all.order(capacity: :desc)
     @courses = Course.where(year: current_year, semester: current_semester ).order(:size=> :desc)
@@ -245,8 +264,7 @@ class CoursesController < ApplicationController
       arr_rat = parse_available_time(rats)
       arr_rat.each do |rt|
         @timeslots.each do |ts|
-          arr_ts = []
-          arr_ts << ts.day.scan( /\w/) << ts.from_time << ts.to_time
+          arr_ts = timeslot_to_array_time(ts)
           if include_time?(rt, arr_ts)
             if ts.from_time < 1700
               room_timeslots << room.capacity
@@ -301,7 +319,108 @@ class CoursesController < ApplicationController
       flash.now[:success] = "Rooms might be enough."
     end
   end
-
+  
+  #############################################################################
+  def auto_schedule
+    count = 0
+    @courses = Course.where(year: current_year, semester: current_semester ).order(:size=> :desc).includes(:user)
+    rooms = Room.where.not("id=?",1).order(capacity: :desc)
+    timeslots = Timeslot.all
+    @rooms_availability = {}
+    rooms.each do |room|
+      values = []
+      availability = room.available_time
+      if availability!=nil
+        arr_avail = parse_available_time(availability)
+        arr_avail.each do |rat|
+          timeslots.each do |ts|
+            arr_ts = timeslot_to_array_time(ts)
+            if include_time?(rat, arr_ts)
+              values<< ts.id
+            end
+          end
+        end
+      end
+      if !values.empty?
+        @rooms_availability.store(room.id, values)
+      end
+    end
+    
+    
+    courses_faculty_notset = []
+    @courses.each do |course|
+      @course=course
+      if course.size == 0
+        next
+      end
+      if course.user_id==1
+        courses_faculty_notset << course
+        next
+      end
+      
+      faculty = course.user
+      preferred = faculty.timeslot_users.where(preference_type: 1)
+      acceptable = faculty.timeslot_users.where(preference_type: 2)
+      capable_rooms = rooms.select{ |room| room.capacity >= course.size }
+      if capable_rooms.empty?
+        next
+      end
+      
+      preferred_timeslots=[]
+      acceptable_timeslots=[]
+      preferred.each { |p| preferred_timeslots << p.timeslot }
+      acceptable.each { |a| acceptable_timeslots << a.timeslot }
+      
+      if set_time_and_room(preferred_timeslots, capable_rooms)
+        count += 1
+        next
+      else
+        if set_time_and_room(acceptable_timeslots, capable_rooms)
+          count += 1
+        end
+      end
+    end
+    
+    courses_faculty_notset.each do |course|
+      @course=course
+      capable_rooms = rooms.select{ |room| room.capacity >= course.size }
+      if capable_rooms.empty?
+        next
+      end
+      if set_time_and_room(timeslots, capable_rooms)
+        count += 1
+        next
+      end
+    end
+    
+    flash[:success] = "#{count} classes are scheduled."
+    redirect_to assignment_table_path
+  end
+  
+  #############################################################################
+  def set_time_and_room(timeslots, capable_rooms)
+    capable_rooms.each do |room|
+      timeslots.each do |ts|
+        room_times = @rooms_availability[room.id]
+        room_times.each do |rt|
+          if ts.id == rt
+            @course.room_id = room.id
+            @course.time = timeslot_to_string(ts)
+            @course.save
+            @rooms_availability[room.id].delete(rt)
+            return true
+          end
+        end
+      end
+    end
+    return false
+  end
+  
+  ##############################################################################
+  def timeslot_to_string(ts)
+    return ts.day+"-"+ts.from_time.to_s+"-"+ts.to_time.to_s
+  end
+  #############################################################################
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
@@ -320,7 +439,7 @@ class CoursesController < ApplicationController
     def render_edit
       @users = User.order(:last_name).pluck(:full_name, :id)
       @rooms = Room.where("capacity >= ?", @course.size).order(:number)
-      @courses = Course.where(year:current_year, semester: current_semester ).order(:number)
+      @courses = Course.where(year: current_year, semester: current_semester ).order(:number)
       @rooms_select = Room.where("capacity >= ?", @course.size).pluck(:number, :id)
       @timeslots = Timeslot.all
       @days = Timeslot.pluck(:day).uniq

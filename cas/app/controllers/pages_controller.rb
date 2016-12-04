@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :require_admin, only:[:admin_main]
+  before_action :require_admin, except: [:root]
   before_action :get_data, only: [:getcourse, :assignment_table]
   
   helper_method :get_unassigned_courses
@@ -22,7 +22,6 @@ class PagesController < ApplicationController
   end
   
   def assignment_table
-    
   end
   
   def get_data
@@ -30,9 +29,6 @@ class PagesController < ApplicationController
     @rooms = Room.all.order(:number)
     @users = User.all
     @timeslots = Timeslot.all
-    # @MWF= Timeslot.where("day=?","MWF").order(:from_time)
-    # @MW= Timeslot.where("day=?","MW").order(:from_time)
-    # @TR= Timeslot.where("day=?","TR").order(:from_time)
     @assigned_courses=[]
   end
   

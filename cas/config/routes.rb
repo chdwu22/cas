@@ -49,4 +49,5 @@ Rails.application.routes.draw do
   get 'delete_course_repo', to:'courses#delete_course_repo'
   get 'delete_all_courses', to:'courses#delete_all_courses'
   get 'enough_rooms', to:'courses#enough_rooms'
+  get 'auto_schedule', to:'courses#auto_schedule'
 end

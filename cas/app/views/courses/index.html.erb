@@ -1,16 +1,15 @@
 <p id="notice"><%= notice %></p>
 
-<div class='row'>
-  <div class="col-xs-2">
-    <%= link_to 'Add Course', get_course_repo_path, class:'btn btn-default' %>
-  </div>
-  <div class="col-xs-offset-2 col-xs-2">
-    <%= link_to 'Enough Rooms?', enough_rooms_path, class:'btn btn-default' %>
-  </div>
-  <div class="col-xs-2">
-    <%= link_to 'Automatic Scheduling', auto_schedule_path, class:'btn btn-default' %>
-  </div>
-</div><br>
+<div class="col-sm-12">
+  <table>
+    <tr>
+      <td><%= link_to 'Add Course', get_course_repo_path, class:'btn btn-default' %></td>
+      <td><%= link_to 'Enough Rooms?', enough_rooms_path, class:'btn btn-default' %> </td>
+      <td> <%= link_to 'Schedule Unassigned Courses', auto_schedule_path(:auto_schedule=>"remaining"), class:'btn btn-default' %> </td>
+      <td><%= link_to 'Schedule All Courses', auto_schedule_path(:auto_schedule=>"all"), data: { confirm: '!!! IMPORTANT: Are you sure to re-schedule ALL the courses?' }, class:'btn btn-danger btn-default' %> </td>
+    </tr>
+  </table>
+</div>
 
 <div class='row'>
   <div class="col-sm-12">

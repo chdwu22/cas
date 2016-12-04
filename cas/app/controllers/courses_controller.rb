@@ -322,9 +322,10 @@ class CoursesController < ApplicationController
   
   #############################################################################
   def auto_schedule
+    scheduling_option = params[:auto_schedule]
     count = 0
-    @courses = Course.where(year: current_year, semester: current_semester ).order(:size=> :desc).includes(:user)
-    rooms = Room.where.not("id=?",1).order(capacity: :desc)
+    @courses = Course.where(year: current_year, semester: current_semester ).order(:size).includes(:user)
+    rooms = Room.where.not("id=?",1).order(:capacity)
     timeslots = Timeslot.all
     @rooms_availability = {}
     rooms.each do |room|
@@ -346,12 +347,27 @@ class CoursesController < ApplicationController
       end
     end
     
+    if scheduling_option=="remaining"
+      rooms.each do |room|
+        courses = room.courses
+        courses.each do |course|
+          ts_id = get_timeslot_id(course.time, timeslots)
+          @rooms_availability[room.id].delete(ts_id)
+        end
+      end
+    end
+    
     
     courses_faculty_notset = []
     @courses.each do |course|
       @course=course
       if course.size == 0
         next
+      end
+      if scheduling_option=="remaining"
+        if course.time!=nil && course.room_id!=1
+          next
+        end
       end
       if course.user_id==1
         courses_faculty_notset << course
@@ -400,8 +416,8 @@ class CoursesController < ApplicationController
   #############################################################################
   def set_time_and_room(timeslots, capable_rooms)
     capable_rooms.each do |room|
+      room_times = @rooms_availability[room.id]
       timeslots.each do |ts|
-        room_times = @rooms_availability[room.id]
         room_times.each do |rt|
           if ts.id == rt
             @course.room_id = room.id
@@ -419,6 +435,15 @@ class CoursesController < ApplicationController
   ##############################################################################
   def timeslot_to_string(ts)
     return ts.day+"-"+ts.from_time.to_s+"-"+ts.to_time.to_s
+  end
+  
+  def get_timeslot_id(string_time, timeslots)
+    arr_time = string_time.split('-')
+    timeslots.each do |ts|
+      if ts.day==arr_time[0] && ts.from_time==arr_time[1].to_i
+        return ts.id
+      end
+    end
   end
   #############################################################################
   private

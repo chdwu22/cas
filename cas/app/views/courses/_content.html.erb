@@ -2,15 +2,15 @@
   <% course = get_course(room, mtwrf) %>
   <% preference = get_faculty_preference(mtwrf) %>
   <% availability = get_availability(room, mtwrf) %>
-
-  <% if preference == 1 %> 
-    <td bgcolor="#CCFFCC"> 
-  <% elsif preference == 3 %> 
-    <td bgcolor="#FFCCCC"> 
-  <% else %> 
-    <% if availability==false %>
-      <td bgcolor="#AAAAAA">
-    <% else %>
+  
+  <% if availability==false %>
+    <td bgcolor="#AAAAAA">
+  <% else %>
+    <% if preference == 1 %> 
+      <td bgcolor="#CCFFCC"> 
+    <% elsif preference == 3 %> 
+      <td bgcolor="#FFCCCC"> 
+    <% else %> 
       <td> 
     <% end %>
   <% end %>

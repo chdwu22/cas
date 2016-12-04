@@ -52,16 +52,15 @@
               <% @timeslots.each do |ts| %>
                 <% if day == ts.day %>
                   <% option = get_option(ts) %>
+                  <td  bgcolor="<%=option[1]%>" >
                     <% if @faculty_permission.value=="yes" %>
-                        <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-                        <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %>
-                        <%= select_tag("prf-#{day}-#{ts.from_time}-#{ts.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %>
-                    <% else %>
-                      <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
                       <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %>
-                      <%= option[1] %>
+                      <%= select_tag("prf-#{day}-#{ts.from_time}-#{ts.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %>
+                    <% else %>
+                      <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %> <br>
+                      <%= option[2] %>
                     <% end %>
-                    </td>
+                  </td>
                 <% end %>
               <% end %>
             </tr>

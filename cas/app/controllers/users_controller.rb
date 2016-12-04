@@ -133,12 +133,15 @@ class UsersController < ApplicationController
     @user_pref.each do |up|
       if (up.timeslot.day == mw.day && up.timeslot.from_time == mw.from_time)
         option = "A"
+        color = ""
         if(up.preference_type==1)
+          color = "#CCFFCC"
           option = "P"
         elsif (up.preference_type==3)
+          color = "#FFCCCC"
           option = "U"
         end
-        return [up.preference_type,option]
+        return [up.preference_type,color,option]
       end
     end
   end

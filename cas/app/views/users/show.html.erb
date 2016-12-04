@@ -44,28 +44,30 @@
     <b>P</b>:preferred  <b>A</b>:acceptable  <b>U</b>:unacceptable <br>
     Maximum "preferred" time slots: <b><%= @preferred_time_slot_limit.value%></b> <br>
     Maximum "unacceptable" time slots: <b><%= @unacceptable_time_slot_limit.value%></b> <br><br>
-    <table class="table table-striped">
-        <% @days.each do |day| %>
-          <tr>
-            <td><b><%= day %></b></td>
-            <% @timeslots.each do |ts| %>
-              <% if day == ts.day %>
-                <% option = get_option(ts) %>
-                  <% if @faculty_permission.value=="yes" %>
+    <div class="well">
+      <table class="table table-striped">
+          <% @days.each do |day| %>
+            <tr>
+              <td><b><%= day %></b></td>
+              <% @timeslots.each do |ts| %>
+                <% if day == ts.day %>
+                  <% option = get_option(ts) %>
+                    <% if @faculty_permission.value=="yes" %>
+                        <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
+                        <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %>
+                        <%= select_tag("prf-#{day}-#{ts.from_time}-#{ts.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %>
+                    <% else %>
                       <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
                       <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %>
-                      <%= select_tag("prf-#{day}-#{ts.from_time}-#{ts.to_time}".to_sym, options_for_select([['P',1], ['A',2], ['U', 3]], option[0])) %>
-                  <% else %>
-                    <% if option[0]==1 %> <td  bgcolor="#CCFFCC"> <%elsif option[0] == 3%> <td  bgcolor="#FFCCCC"> <% else %> <td> <% end %>
-                    <%= format_time(ts.from_time.to_s+"-"+ts.to_time.to_s) %>
-                    <%= option[1] %>
-                  <% end %>
-                  </td>
+                      <%= option[1] %>
+                    <% end %>
+                    </td>
+                <% end %>
               <% end %>
-            <% end %>
-          </tr>
-        <% end %>
-    </table>
+            </tr>
+          <% end %>
+      </table>
+    </div>
     <% if @faculty_permission.value=="yes" %>
       <%= submit_tag("Update preferences", class: 'btn btn-primary' )%>
     <% else %>

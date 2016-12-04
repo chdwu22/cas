@@ -6,10 +6,12 @@
   <% if availability==false %>
     <td bgcolor="#AAAAAA">
   <% else %>
-    <% if preference == 1 %> 
-      <td bgcolor="#CCFFCC"> 
-    <% elsif preference == 3 %> 
-      <td bgcolor="#FFCCCC"> 
+    <% if course==nil || course.user_id == @course.user_id%>
+      <% if preference == 1 %> 
+        <td bgcolor="#CCFFCC"> 
+      <% elsif preference == 3 %> 
+        <td bgcolor="#FFCCCC"> 
+      <% end %>
     <% else %> 
       <td> 
     <% end %>

@@ -471,7 +471,7 @@ class CoursesController < ApplicationController
       @user_pref = TimeslotUser.where("user_id=?", @course.user_id).includes(:timeslot)
       @assigned_courses=[]
       
-      @stringtimeslots = []
+      @stringtimeslots = [nil]
       @timeslots.each do |ts|
         str = ts.day + "-" + ts.from_time.to_s + "-" + ts.to_time.to_s
         @stringtimeslots << str

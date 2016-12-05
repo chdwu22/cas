@@ -37,14 +37,14 @@
               <td><%= course.name %></td>
               <td><%= course.size if course.size!=0 %></td>
               <td>
-                <% if course.time!=nil %> 
+                <% if course.time!=nil && course.room_id != 1%> 
                   <% if !course.time.empty? %>
                     <%= day_time_display(course.time) %>
                   <% end %>
                 <% end %>
               </td>
               <td><%= course.year %> <%= course.semester %></td>
-              <td><% if course.room.id!=1 %><%= course.room.number %><% end %></td>
+              <td><% if course.room_id!=1 %><%= course.room.number %><% end %></td>
               <td><%= course.user.full_name if course.user.id !=1%></td>
               <td><%= link_to 'Schedule/Edit', edit_course_path(course), class:'btn btn-sm btn-default'  %></td>
               <td><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-default'  %></td>

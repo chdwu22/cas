@@ -11,29 +11,29 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :section %>
-    <%= f.text_field :section %>
-  </div>
-
-  <div class="field">
-    <%= f.label :size %>
-    <%= f.number_field :size %>
-  </div>
-
-  <div class="field">
-    <%= f.label "Faculty"%>
-    <%= f.select :user_id, options_for_select(@users, course.user_id) %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :room_id %>
-    <%= f.select :room_id, options_for_select(@rooms_select, course.room_id) %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :time%>
-    <%= f.select :time, options_for_select(@stringtimeslots, course.time) %>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.label :section, :style => "float:left; margin-right: 1em;" %></td>
+        <td><%= f.text_field :section %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :size, :style => "float:left; margin-right: 1em;" %></td>
+        <td><%= f.number_field :size %></td>
+      </tr>
+      <tr>
+        <td><%= f.label "Faculty", :style => "float:left; margin-right: 1em;" %></td>
+        <td><%= f.select :user_id, options_for_select(@users, course.user_id) %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :room_id, :style => "float:left; margin-right: 1em;" %></td>
+        <td><%= f.select :room_id, options_for_select(@rooms_select, course.room_id) %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :time, :style => "float:left; margin-right: 1em;" %></td>
+        <td><%= f.select :time, options_for_select(@stringtimeslots, course.time) %></td>
+      </tr>
+    </table>
   </div>
 
   <div class="actions">

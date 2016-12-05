@@ -453,7 +453,7 @@ class CoursesController < ApplicationController
     end
     
     def set_courses
-      @courses = Course.where(year: current_year, semester: current_semester ).order(:number)
+      @courses = Course.where(year: current_year, semester: current_semester ).order(:number, :section)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -56,6 +56,7 @@ class CoursesController < ApplicationController
   # PATCH/PUT /courses/1.json
   #############################################################################
   def update
+    keep_field_values
     #check if user entered time is legit format
     if (course_params[:time]!=nil)
       if(!course_params[:time].strip.empty?)
@@ -459,6 +460,15 @@ class CoursesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
       params.require(:course).permit(:number, :section, :name, :size, :day, :time, :year, :semester, :room_id, :user_id)
+    end
+    
+    def keep_field_values
+      ps = course_params
+      @course.section = ps[:section]
+      @course.size = ps[:size]
+      @course.user_id = ps[:user_id]
+      @course.room_id = ps[:room_id]
+      @course.time = ps[:time]
     end
     
     def render_edit

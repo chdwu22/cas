@@ -133,7 +133,7 @@ class CoursesController < ApplicationController
     if user_id==1
       return false
     end
-    faculty_courses = user.courses
+    faculty_courses = user.courses.where(year: current_year, semester: current_semester )
     faculty_courses.each do |fc|
       f_time = fc.time.split('-')
       c_time = course_params[:time].split('-')
